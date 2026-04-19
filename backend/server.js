@@ -10,9 +10,14 @@ const app = express();
 // Middleware
 app.use(cors({
     origin: [
-        'https://smilecraft-dental.netlify.app',
-        'https://smilecraft-admin.netlify.app'
-    ]
+        'https://smilecraftdentist.netlify.app',
+        'https://smilecraft-admin.netlify.app',
+        'http://127.0.0.1:5500',
+        'http://localhost:5500',
+        'http://localhost:3000'
+    ],
+    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'authorization']
 }));
 app.use(express.json());
 
