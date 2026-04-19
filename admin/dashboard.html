@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmileCraft — Admin Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0b0f0e;
+            --surface: #111816;
+            --surface2: #172320;
+            --surface3: #1e2e2b;
+            --teal: #0a7c6e;
+            --teal-bright: #0faf9a;
+            --teal-glow: rgba(10, 124, 110, 0.25);
+            --gold: #c9a84c;
+            --gold-bright: #e8c96a;
+            --red: #e05252;
+            --red-dim: rgba(224, 82, 82, 0.15);
+            --green: #2ecc71;
+            --green-dim: rgba(46, 204, 113, 0.15);
+            --yellow: #f1c40f;
+            --yellow-dim: rgba(241, 196, 15, 0.15);
+            --text: #e8f0ee;
+            --text-muted: #6b8c86;
+            --text-dim: #3a5450;
+            --border: rgba(10, 124, 110, 0.2);
+            --border-bright: rgba(10, 124, 110, 0.5);
+            --font-mono: 'Space Mono', monospace;
+            --font-display: 'Syne', sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: var(--font-mono);
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ── GRID BACKGROUND ── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(10,124,110,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(10,124,110,0.04) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ══════════════════════════════
+           LOGIN SCREEN
+        ══════════════════════════════ */
+        #loginScreen {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            background: var(--bg);
+        }
+
+        .login-box {
+            width: 420px;
+            background: var(--surface);
+            border: 1px solid var(--border-bright);
+            border-radius: 4px;
+            padding: 48px 40px;
+            position: relative;
+            box-shadow: 0 0 60px var(--teal-glow), 0 0 120px rgba(10,124,110,0.1);
+        }
+
+        .login-box::before {
+            content: '';
+            position: absolute;
+            top: -1px; left: -1px; right: -1px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--teal), var(--gold), var(--teal));
+            border-radius: 4px 4px 0 0;
+        }
+
+        .login-brand {
+            margin-bottom: 36px;
+        }
+
+        .login-brand .label {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            letter-spacing: 0.25em;
+            color: var(--teal-bright);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .login-brand h1 {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--text);
+            line-height: 1;
+        }
+
+        .login-brand h1 span { color: var(--teal-bright); }
+
+        .login-field {
+            margin-bottom: 16px;
+        }
+
+        .login-field label {
+            display: block;
+            font-size: 0.65rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .login-field input {
+            width: 100%;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 3px;
+            padding: 12px 16px;
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
+            color: var(--text);
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .login-field input:focus {
+            border-color: var(--teal-bright);
+            box-shadow: 0 0 0 3px var(--teal-glow);
+        }
+
+        .btn-login {
+            width: 100%;
+            margin-top: 24px;
+            background: var(--teal);
+            border: none;
+            border-radius: 3px;
+            padding: 14px;
+            font-family: var(--font-display);
+            font-size: 0.875rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-login:hover { background: var(--teal-bright); transform: translateY(-1px); }
+        .btn-login:active { transform: translateY(0); }
+
+        .login-error {
+            margin-top: 12px;
+            padding: 10px 14px;
+            background: var(--red-dim);
+            border: 1px solid var(--red);
+            border-radius: 3px;
+            font-size: 0.75rem;
+            color: var(--red);
+            display: none;
+        }
+
+        /* ══════════════════════════════
+           DASHBOARD LAYOUT
+        ══════════════════════════════ */
+        #dashboard { display: none; position: relative; z-index: 1; }
+
+        /* TOPBAR */
+        .topbar {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: 60px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            z-index: 50;
+            backdrop-filter: blur(10px);
+        }
+
+        .topbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .topbar-brand .icon {
+            width: 32px;
+            height: 32px;
+            background: var(--teal);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+            color: white;
+        }
+
+        .topbar-brand .name {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .topbar-brand .name span { color: var(--teal-bright); }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .topbar-tag {
+            font-size: 0.65rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--teal-bright);
+            background: var(--teal-glow);
+            border: 1px solid var(--border);
+            padding: 4px 10px;
+            border-radius: 2px;
+        }
+
+        .btn-logout {
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 3px;
+            padding: 6px 14px;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-logout:hover { border-color: var(--red); color: var(--red); }
+
+        /* SIDEBAR */
+        .sidebar {
+            position: fixed;
+            top: 60px; left: 0; bottom: 0;
+            width: 220px;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            padding: 24px 0;
+            z-index: 40;
+        }
+
+        .nav-section {
+            padding: 0 16px;
+            margin-bottom: 8px;
+        }
+
+        .nav-section-label {
+            font-size: 0.6rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            padding: 0 8px;
+            margin-bottom: 6px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            border: 1px solid transparent;
+            margin-bottom: 2px;
+        }
+
+        .nav-item:hover { background: var(--surface2); color: var(--text); }
+
+        .nav-item.active {
+            background: var(--teal-glow);
+            border-color: var(--border);
+            color: var(--teal-bright);
+        }
+
+        .nav-item i { width: 16px; text-align: center; font-size: 0.8rem; }
+
+        .nav-badge {
+            margin-left: auto;
+            background: var(--teal);
+            color: white;
+            font-size: 0.6rem;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-family: var(--font-display);
+        }
+
+        /* MAIN CONTENT */
+        .main {
+            margin-left: 220px;
+            margin-top: 60px;
+            padding: 32px;
+            min-height: calc(100vh - 60px);
+        }
+
+        /* PAGE HEADER */
+        .page-header {
+            margin-bottom: 28px;
+        }
+
+        .page-header .breadcrumb {
+            font-size: 0.65rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            margin-bottom: 6px;
+        }
+
+        .page-header h2 {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .page-header h2 span { color: var(--teal-bright); }
+
+        /* STATS GRID */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 20px 24px;
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.2s;
+        }
+
+        .stat-card:hover { border-color: var(--border-bright); }
+
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+        }
+
+        .stat-card.total::after { background: var(--teal-bright); }
+        .stat-card.pending::after { background: var(--yellow); }
+        .stat-card.confirmed::after { background: var(--green); }
+        .stat-card.cancelled::after { background: var(--red); }
+
+        .stat-label {
+            font-size: 0.65rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            font-family: var(--font-display);
+            font-size: 2.2rem;
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .stat-card.total .stat-value { color: var(--teal-bright); }
+        .stat-card.pending .stat-value { color: var(--yellow); }
+        .stat-card.confirmed .stat-value { color: var(--green); }
+        .stat-card.cancelled .stat-value { color: var(--red); }
+
+        .stat-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.8rem;
+            opacity: 0.08;
+        }
+
+        /* TOOLBAR */
+        .toolbar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 200px;
+            position: relative;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        .search-box input {
+            width: 100%;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 3px;
+            padding: 10px 14px 10px 36px;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--text);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-box input::placeholder { color: var(--text-dim); }
+        .search-box input:focus { border-color: var(--teal-bright); }
+
+        .filter-input {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 3px;
+            padding: 10px 14px;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--text);
+            outline: none;
+            transition: border-color 0.2s;
+            cursor: pointer;
+        }
+
+        .filter-input:focus { border-color: var(--teal-bright); }
+
+        .btn-clear {
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 3px;
+            padding: 10px 16px;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn-clear:hover { border-color: var(--teal-bright); color: var(--teal-bright); }
+
+        /* TABLE */
+        .table-wrap {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: var(--surface2);
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            padding: 12px 16px;
+            text-align: left;
+            font-size: 0.6rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            font-weight: 400;
+            white-space: nowrap;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid var(--border);
+            transition: background 0.15s;
+        }
+
+        tbody tr:last-child { border-bottom: none; }
+        tbody tr:hover { background: var(--surface2); }
+
+        td {
+            padding: 14px 16px;
+            font-size: 0.8rem;
+            color: var(--text);
+            vertical-align: middle;
+        }
+
+        .patient-name {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 0.875rem;
+            color: var(--text);
+        }
+
+        .patient-contact {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .service-tag {
+            display: inline-block;
+            background: var(--teal-glow);
+            border: 1px solid var(--border);
+            color: var(--teal-bright);
+            font-size: 0.65rem;
+            letter-spacing: 0.08em;
+            padding: 3px 8px;
+            border-radius: 2px;
+            text-transform: uppercase;
+        }
+
+        .date-cell {
+            font-size: 0.75rem;
+            color: var(--text);
+        }
+
+        .time-cell {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.65rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 2px;
+            font-weight: 600;
+        }
+
+        .status-badge::before {
+            content: '';
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+        }
+
+        .status-badge.pending {
+            background: var(--yellow-dim);
+            color: var(--yellow);
+            border: 1px solid rgba(241,196,15,0.3);
+        }
+        .status-badge.pending::before { background: var(--yellow); }
+
+        .status-badge.confirmed {
+            background: var(--green-dim);
+            color: var(--green);
+            border: 1px solid rgba(46,204,113,0.3);
+        }
+        .status-badge.confirmed::before { background: var(--green); }
+
+        .status-badge.cancelled {
+            background: var(--red-dim);
+            color: var(--red);
+            border: 1px solid rgba(224,82,82,0.3);
+        }
+        .status-badge.cancelled::before { background: var(--red); }
+
+        .action-btns {
+            display: flex;
+            gap: 6px;
+        }
+
+        .btn-action {
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            padding: 5px 10px;
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.15s;
+            color: var(--text-muted);
+        }
+
+        .btn-action.confirm {
+            border-color: rgba(46,204,113,0.3);
+            color: var(--green);
+        }
+        .btn-action.confirm:hover {
+            background: var(--green-dim);
+            border-color: var(--green);
+        }
+
+        .btn-action.cancel {
+            border-color: rgba(224,82,82,0.3);
+            color: var(--red);
+        }
+        .btn-action.cancel:hover {
+            background: var(--red-dim);
+            border-color: var(--red);
+        }
+
+        /* EMPTY STATE */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-dim);
+        }
+
+        .empty-state i {
+            font-size: 2rem;
+            margin-bottom: 12px;
+            display: block;
+            color: var(--teal);
+            opacity: 0.4;
+        }
+
+        .empty-state p {
+            font-size: 0.8rem;
+            letter-spacing: 0.05em;
+        }
+
+        /* SUBSCRIBERS PAGE */
+        #subscribersPage { display: none; }
+
+        .subs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .sub-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            transition: border-color 0.2s;
+        }
+
+        .sub-card:hover { border-color: var(--border-bright); }
+
+        .sub-avatar {
+            width: 36px;
+            height: 36px;
+            background: var(--teal-glow);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 0.875rem;
+            color: var(--teal-bright);
+            flex-shrink: 0;
+        }
+
+        .sub-email {
+            font-size: 0.8rem;
+            color: var(--text);
+            word-break: break-all;
+        }
+
+        .sub-date {
+            font-size: 0.65rem;
+            color: var(--text-dim);
+            margin-top: 2px;
+        }
+
+        /* TOAST */
+        .toast {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            background: var(--surface);
+            border: 1px solid var(--border-bright);
+            border-radius: 4px;
+            padding: 14px 20px;
+            font-size: 0.8rem;
+            color: var(--text);
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transform: translateY(80px);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(.175,.885,.32,1.275);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+        }
+
+        .toast.show { transform: translateY(0); opacity: 1; }
+        .toast.success { border-color: var(--green); }
+        .toast.success i { color: var(--green); }
+        .toast.error { border-color: var(--red); }
+        .toast.error i { color: var(--red); }
+
+        /* LOADING */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+        }
+
+        .loading i { margin-right: 8px; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* SCROLLBAR */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--teal); }
+
+        /* FADE IN */
+        .fade-in { animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media (max-width: 900px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .sidebar { display: none; }
+            .main { margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════
+     LOGIN SCREEN
+══════════════════════════════ -->
+<div id="loginScreen">
+    <div class="login-box">
+        <div class="login-brand">
+            <div class="label">// admin portal</div>
+            <h1>Smile<span>Craft</span></h1>
+        </div>
+        <div class="login-field">
+            <label>Email Address</label>
+            <input type="email" id="loginEmail" placeholder="admin@smilecraft.com" />
+        </div>
+        <div class="login-field">
+            <label>Password</label>
+            <input type="password" id="loginPassword" placeholder="••••••••••" />
+        </div>
+        <button class="btn-login" onclick="doLogin()">
+            <i class="fas fa-sign-in-alt" style="margin-right:8px;"></i> Access Dashboard
+        </button>
+        <div class="login-error" id="loginError">
+            <i class="fas fa-exclamation-triangle"></i> Invalid credentials. Try again.
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════
+     DASHBOARD
+══════════════════════════════ -->
+<div id="dashboard">
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+        <div class="topbar-brand">
+            <div class="icon"><i class="fas fa-tooth"></i></div>
+            <div class="name">Smile<span>Craft</span> <span style="font-size:0.7rem; color:var(--text-dim); font-weight:400;">/ Admin</span></div>
+        </div>
+        <div class="topbar-right">
+            <div class="topbar-tag"><i class="fas fa-circle" style="font-size:0.4rem; margin-right:5px; color:var(--green);"></i> Live</div>
+            <button class="btn-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="nav-section">
+            <div class="nav-section-label">Navigation</div>
+            <div class="nav-item active" onclick="showPage('appointments')">
+                <i class="fas fa-calendar-check"></i> Appointments
+                <span class="nav-badge" id="pendingBadge">0</span>
+            </div>
+            <div class="nav-item" onclick="showPage('subscribers')">
+                <i class="fas fa-envelope"></i> Subscribers
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN -->
+    <div class="main">
+
+        <!-- APPOINTMENTS PAGE -->
+        <div id="appointmentsPage">
+            <div class="page-header fade-in">
+                <div class="breadcrumb">Dashboard / Appointments</div>
+                <h2>Appointment <span>Manager</span></h2>
+            </div>
+
+            <!-- STATS -->
+            <div class="stats-grid fade-in" id="statsGrid">
+                <div class="stat-card total">
+                    <div class="stat-label">Total Bookings</div>
+                    <div class="stat-value" id="statTotal">—</div>
+                    <i class="fas fa-calendar-alt stat-icon"></i>
+                </div>
+                <div class="stat-card pending">
+                    <div class="stat-label">Pending</div>
+                    <div class="stat-value" id="statPending">—</div>
+                    <i class="fas fa-clock stat-icon"></i>
+                </div>
+                <div class="stat-card confirmed">
+                    <div class="stat-label">Confirmed</div>
+                    <div class="stat-value" id="statConfirmed">—</div>
+                    <i class="fas fa-check-circle stat-icon"></i>
+                </div>
+                <div class="stat-card cancelled">
+                    <div class="stat-label">Cancelled</div>
+                    <div class="stat-value" id="statCancelled">—</div>
+                    <i class="fas fa-times-circle stat-icon"></i>
+                </div>
+            </div>
+
+            <!-- TOOLBAR -->
+            <div class="toolbar fade-in">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search patient name..." oninput="filterTable()" />
+                </div>
+                <input type="date" class="filter-input" id="dateFilter" onchange="filterTable()" />
+                <button class="btn-clear" onclick="clearFilters()"><i class="fas fa-times"></i> Clear</button>
+            </div>
+
+            <!-- TABLE -->
+            <div class="table-wrap fade-in">
+                <div id="tableContent">
+                    <div class="loading"><i class="fas fa-spinner"></i> Loading appointments...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SUBSCRIBERS PAGE -->
+        <div id="subscribersPage">
+            <div class="page-header fade-in">
+                <div class="breadcrumb">Dashboard / Subscribers</div>
+                <h2>Newsletter <span>Subscribers</span></h2>
+            </div>
+            <div id="subsContent">
+                <div class="loading"><i class="fas fa-spinner"></i> Loading subscribers...</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+    <i class="fas fa-check-circle"></i>
+    <span id="toastMsg">Done!</span>
+</div>
+
+<script>
+    const API = 'http://localhost:5000/api';
+    let token = localStorage.getItem('sc_token');
+    let allAppointments = [];
+
+    // ── AUTO LOGIN IF TOKEN EXISTS ──
+    if (token) showDashboard();
+
+    // ── LOGIN ──
+    async function doLogin() {
+        const email = document.getElementById('loginEmail').value.trim();
+        const password = document.getElementById('loginPassword').value.trim();
+        const errEl = document.getElementById('loginError');
+        errEl.style.display = 'none';
+
+        try {
+            const res = await fetch(`${API}/admin/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error);
+            token = data.token;
+            localStorage.setItem('sc_token', token);
+            showDashboard();
+        } catch (err) {
+            errEl.style.display = 'block';
+        }
+    }
+
+    // Enter key login
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Enter' && document.getElementById('loginScreen').style.display !== 'none') doLogin();
+    });
+
+    function showDashboard() {
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+        loadAppointments();
+    }
+
+    function logout() {
+        localStorage.removeItem('sc_token');
+        token = null;
+        document.getElementById('loginScreen').style.display = 'flex';
+        document.getElementById('dashboard').style.display = 'none';
+    }
+
+    // ── PAGES ──
+    function showPage(page) {
+        document.getElementById('appointmentsPage').style.display = page === 'appointments' ? 'block' : 'none';
+        document.getElementById('subscribersPage').style.display = page === 'subscribers' ? 'block' : 'none';
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        event.currentTarget.classList.add('active');
+        if (page === 'subscribers') loadSubscribers();
+    }
+
+    // ── LOAD APPOINTMENTS ──
+    async function loadAppointments() {
+        try {
+            const res = await fetch(`${API}/admin/appointments`, {
+                headers: { 'authorization': token }
+            });
+            if (res.status === 401) { logout(); return; }
+            allAppointments = await res.json();
+            updateStats();
+            renderTable(allAppointments);
+        } catch (err) {
+            document.getElementById('tableContent').innerHTML = `<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><p>Could not load appointments</p></div>`;
+        }
+    }
+
+    // ── STATS ──
+    function updateStats() {
+        document.getElementById('statTotal').textContent = allAppointments.length;
+        document.getElementById('statPending').textContent = allAppointments.filter(a => a.status === 'pending').length;
+        document.getElementById('statConfirmed').textContent = allAppointments.filter(a => a.status === 'confirmed').length;
+        document.getElementById('statCancelled').textContent = allAppointments.filter(a => a.status === 'cancelled').length;
+        document.getElementById('pendingBadge').textContent = allAppointments.filter(a => a.status === 'pending').length;
+    }
+
+    // ── RENDER TABLE ──
+    function renderTable(data) {
+        if (data.length === 0) {
+            document.getElementById('tableContent').innerHTML = `<div class="empty-state"><i class="fas fa-calendar-times"></i><p>No appointments found</p></div>`;
+            return;
+        }
+
+        const rows = data.map(a => `
+            <tr>
+                <td>
+                    <div class="patient-name">${a.name}</div>
+                    <div class="patient-contact">${a.email}</div>
+                    <div class="patient-contact"><i class="fas fa-phone" style="font-size:0.6rem;margin-right:4px;"></i>${a.phone}</div>
+                </td>
+                <td><span class="service-tag">${a.service}</span></td>
+                <td>
+                    <div class="date-cell">${formatDate(a.date)}</div>
+                    <div class="time-cell">${a.time}</div>
+                </td>
+                <td><span class="status-badge ${a.status}">${a.status}</span></td>
+                <td>
+                    <div class="action-btns">
+                        ${a.status !== 'confirmed' ? `<button class="btn-action confirm" onclick="updateStatus('${a._id}', 'confirmed')"><i class="fas fa-check"></i> Confirm</button>` : ''}
+                        ${a.status !== 'cancelled' ? `<button class="btn-action cancel" onclick="updateStatus('${a._id}', 'cancelled')"><i class="fas fa-times"></i> Cancel</button>` : ''}
+                    </div>
+                </td>
+            </tr>
+        `).join('');
+
+        document.getElementById('tableContent').innerHTML = `
+            <table>
+                <thead>
+                    <tr>
+                        <th>Patient</th>
+                        <th>Service</th>
+                        <th>Date & Time</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>${rows}</tbody>
+            </table>
+        `;
+    }
+
+    // ── FILTER TABLE ──
+    function filterTable() {
+        const search = document.getElementById('searchInput').value.toLowerCase();
+        const date = document.getElementById('dateFilter').value;
+        const filtered = allAppointments.filter(a => {
+            const nameMatch = a.name.toLowerCase().includes(search);
+            const dateMatch = date ? a.date === date : true;
+            return nameMatch && dateMatch;
+        });
+        renderTable(filtered);
+    }
+
+    function clearFilters() {
+        document.getElementById('searchInput').value = '';
+        document.getElementById('dateFilter').value = '';
+        renderTable(allAppointments);
+    }
+
+    // ── UPDATE STATUS ──
+    async function updateStatus(id, status) {
+        try {
+            const res = await fetch(`${API}/admin/appointments/${id}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json', 'authorization': token },
+                body: JSON.stringify({ status })
+            });
+            if (!res.ok) throw new Error();
+            showToast(`Appointment ${status}`, 'success');
+            await loadAppointments();
+        } catch {
+            showToast('Update failed', 'error');
+        }
+    }
+
+    // ── LOAD SUBSCRIBERS ──
+    async function loadSubscribers() {
+        document.getElementById('subsContent').innerHTML = `<div class="loading"><i class="fas fa-spinner"></i> Loading...</div>`;
+        try {
+            const res = await fetch(`${API}/admin/subscribers`, {
+                headers: { 'authorization': token }
+            });
+            const subs = await res.json();
+            if (subs.length === 0) {
+                document.getElementById('subsContent').innerHTML = `<div class="empty-state"><i class="fas fa-envelope-open"></i><p>No subscribers yet</p></div>`;
+                return;
+            }
+            document.getElementById('subsContent').innerHTML = `
+                <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:4px;">${subs.length} subscriber${subs.length !== 1 ? 's' : ''} total</p>
+                <div class="subs-grid">
+                    ${subs.map(s => `
+                        <div class="sub-card">
+                            <div class="sub-avatar">${s.email[0].toUpperCase()}</div>
+                            <div>
+                                <div class="sub-email">${s.email}</div>
+                                <div class="sub-date">Joined ${formatDate(s.createdAt?.split('T')[0])}</div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        } catch {
+            document.getElementById('subsContent').innerHTML = `<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><p>Could not load subscribers</p></div>`;
+        }
+    }
+
+    // ── HELPERS ──
+    function formatDate(dateStr) {
+        if (!dateStr) return '—';
+        const d = new Date(dateStr + 'T00:00:00');
+        return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+    }
+
+    function showToast(msg, type = 'success') {
+        const t = document.getElementById('toast');
+        const icon = t.querySelector('i');
+        t.className = `toast ${type}`;
+        icon.className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-times-circle';
+        document.getElementById('toastMsg').textContent = msg;
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 3000);
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,3377 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmileCraft Dental Studio</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.freepik.com/512/1869/1869543.png">
+    <style>
+        :root {
+            --teal: #0a7c6e;
+            --teal-light: #12a08f;
+            --teal-pale: #e0f5f2;
+            --gold: #c9a84c;
+            --gold-light: #e8c96a;
+            --dark: #0f1f1d;
+            --charcoal: #1e3330;
+            --cream: #faf8f4;
+            --white: #ffffff;
+            --gray: #6b7c79;
+            --light-gray: #f0f0ec;
+            --font-display: 'Playfair Display', serif;
+            --font-body: 'DM Sans', sans-serif;
+            --shadow: 0 20px 60px rgba(10, 124, 110, 0.15);
+            --shadow-lg: 0 40px 100px rgba(10, 124, 110, 0.2);
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--cream);
+            color: var(--dark);
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        /* Custom Cursor */
+        .cursor {
+            width: 12px;
+            height: 12px;
+            background: var(--teal);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.15s ease;
+            mix-blend-mode: multiply;
+        }
+
+        .cursor-follower {
+            width: 36px;
+            height: 36px;
+            border: 2px solid var(--teal);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            transition: all 0.25s cubic-bezier(.175, .885, .32, 1.275);
+            opacity: 0.6;
+        }
+
+        .cursor.expand {
+            transform: scale(3);
+            background: var(--gold);
+        }
+
+        .cursor-follower.expand {
+            transform: scale(1.8);
+            border-color: var(--gold);
+            opacity: 0.3;
+        }
+
+        /* Navbar */
+        .navbar-custom {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 18px 0;
+            background: transparent;
+            transition: all 0.4s ease;
+        }
+
+        .navbar-custom.scrolled {
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(20px);
+            padding: 12px 0;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .navbar-brand-text {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--white);
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .navbar-custom.scrolled .navbar-brand-text {
+            color: var(--dark);
+        }
+
+        .navbar-brand-icon {
+            width: 38px;
+            height: 38px;
+            background: var(--gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            color: var(--white);
+        }
+
+        .nav-link-custom {
+            font-size: 0.875rem;
+            font-weight: 500;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.85) !important;
+            padding: 6px 16px !important;
+            position: relative;
+            transition: color 0.3s;
+            text-decoration: none;
+        }
+
+        .navbar-custom.scrolled .nav-link-custom {
+            color: var(--charcoal) !important;
+        }
+
+        .nav-link-custom::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 16px;
+            right: 16px;
+            height: 2px;
+            background: var(--gold);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .nav-link-custom:hover::after {
+            transform: scaleX(1);
+        }
+
+        .nav-link-custom:hover {
+            color: var(--gold) !important;
+        }
+
+        .btn-nav {
+            background: var(--gold);
+            color: var(--white) !important;
+            border-radius: 30px;
+            padding: 8px 24px !important;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: 2px solid var(--gold);
+        }
+
+        .btn-nav:hover {
+            background: transparent;
+            color: var(--gold) !important;
+            transform: translateY(-2px);
+        }
+
+        .navbar-toggler-custom {
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 8px;
+            padding: 6px 10px;
+            background: transparent;
+            cursor: pointer;
+        }
+
+        .navbar-custom.scrolled .navbar-toggler-custom {
+            border-color: var(--teal);
+        }
+
+        .toggler-icon {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: white;
+            margin: 5px 0;
+            transition: all 0.3s;
+        }
+
+        .navbar-custom.scrolled .toggler-icon {
+            background: var(--teal);
+        }
+
+        /* ===================== HERO CAROUSEL ===================== */
+        .hero-carousel {
+            position: relative;
+            height: 100vh;
+            min-height: 680px;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transition: opacity 1.2s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .slide.active {
+            opacity: 1;
+            z-index: 1;
+        }
+
+        .slide-bg {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            transform: scale(1.05);
+            transition: transform 8s ease;
+        }
+
+        .slide.active .slide-bg {
+            transform: scale(1);
+        }
+
+        .slide-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(105deg, rgba(10, 30, 28, 0.85) 45%, rgba(10, 30, 28, 0.3) 100%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            padding: 0 60px;
+            max-width: 680px;
+        }
+
+        .hero-tag {
+            display: inline-block;
+            background: var(--gold);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            padding: 6px 18px;
+            border-radius: 30px;
+            margin-bottom: 24px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.7s 0.2s ease;
+        }
+
+        .slide.active .hero-tag {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: clamp(2.6rem, 5vw, 4.2rem);
+            font-weight: 900;
+            color: white;
+            line-height: 1.08;
+            margin-bottom: 20px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s 0.4s ease;
+        }
+
+        .slide.active .hero-title {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hero-desc {
+            font-size: 1.05rem;
+            color: rgba(255, 255, 255, 0.78);
+            line-height: 1.7;
+            margin-bottom: 36px;
+            max-width: 480px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s 0.6s ease;
+        }
+
+        .slide.active .hero-desc {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s 0.8s ease;
+        }
+
+        .slide.active .hero-btns {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .btn-primary-custom {
+            background: var(--gold);
+            color: white;
+            border: 2px solid var(--gold);
+            padding: 14px 34px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary-custom:hover {
+            background: transparent;
+            color: var(--gold-light);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(201, 168, 76, 0.4);
+        }
+
+        .btn-outline-custom {
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            padding: 14px 34px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-outline-custom:hover {
+            border-color: white;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        /* Carousel Controls */
+        .carousel-nav {
+            position: absolute;
+            bottom: 40px;
+            right: 60px;
+            z-index: 10;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .carousel-btn {
+            width: 48px;
+            height: 48px;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 50%;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .carousel-btn:hover {
+            background: var(--gold);
+            border-color: var(--gold);
+            transform: scale(1.1);
+        }
+
+        .carousel-dots {
+            position: absolute;
+            bottom: 52px;
+            left: 60px;
+            z-index: 10;
+            display: flex;
+            gap: 10px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .dot.active {
+            width: 28px;
+            border-radius: 4px;
+            background: var(--gold);
+        }
+
+        .hero-scroll-hint {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.72rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateX(-50%) translateY(0);
+            }
+
+            50% {
+                transform: translateX(-50%) translateY(8px);
+            }
+        }
+
+        /* ===================== F-PATTERN SECTION ===================== */
+        .f-pattern-section {
+            padding: 100px 0;
+            background: var(--white);
+        }
+
+        .section-label {
+            font-size: 0.75rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--teal);
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            color: var(--dark);
+            line-height: 1.15;
+            margin-bottom: 20px;
+        }
+
+        .section-desc {
+            font-size: 1rem;
+            color: var(--gray);
+            line-height: 1.75;
+            max-width: 520px;
+        }
+
+        /* F-Pattern: horizontal scans then vertical */
+        .f-row-1 {
+            display: flex;
+            gap: 32px;
+            margin-bottom: 32px;
+            align-items: center;
+        }
+
+        .f-row-2 {
+            display: flex;
+            gap: 32px;
+            margin-bottom: 32px;
+            align-items: center;
+        }
+
+        .f-vertical {
+            width: 280px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .f-card {
+            background: var(--cream);
+            border-left: 4px solid var(--teal);
+            padding: 20px 24px;
+            border-radius: 0 12px 12px 0;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .f-card:hover {
+            background: var(--teal-pale);
+            transform: translateX(6px);
+            box-shadow: var(--shadow);
+        }
+
+        .f-card-icon {
+            font-size: 1.4rem;
+            color: var(--teal);
+            margin-bottom: 8px;
+        }
+
+        .f-card h5 {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            color: var(--dark);
+            margin-bottom: 4px;
+        }
+
+        .f-card p {
+            font-size: 0.83rem;
+            color: var(--gray);
+            line-height: 1.5;
+        }
+
+        .f-image-block {
+            flex: 1;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            height: 320px;
+        }
+
+        .f-image-block img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .f-image-block:hover img {
+            transform: scale(1.05);
+        }
+
+        .f-image-badge {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: var(--gold);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .f-stat-row {
+            display: flex;
+            gap: 40px;
+            margin-top: 16px;
+            padding: 28px;
+            background: var(--teal);
+            border-radius: 16px;
+            flex: 1;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stat-item {
+            text-align: center;
+            color: white;
+        }
+
+        .stat-num {
+            font-family: var(--font-display);
+            font-size: 2.4rem;
+            font-weight: 900;
+            line-height: 1;
+            background: linear-gradient(135deg, white, var(--gold-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            margin-top: 4px;
+        }
+
+        .stat-divider {
+            width: 1px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Counter animation */
+        .count-up {
+            display: inline-block;
+        }
+
+        /* ===================== SERVICES GRID ===================== */
+        .services-section {
+            padding: 100px 0;
+            background: var(--dark);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .services-section::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(10, 124, 110, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .services-section .section-title {
+            color: white;
+        }
+
+        .services-section .section-desc {
+            color: rgba(255, 255, 255, 0.55);
+        }
+
+        .services-section .section-label {
+            color: var(--gold);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 60px;
+        }
+
+        .service-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 20px;
+            padding: 36px 28px;
+            transition: all 0.4s cubic-bezier(.175, .885, .32, 1.275);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(10, 124, 110, 0.2) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--teal);
+            box-shadow: 0 30px 70px rgba(10, 124, 110, 0.25);
+        }
+
+        .service-card:hover::before {
+            opacity: 1;
+        }
+
+        .service-card.featured {
+            background: var(--teal);
+            border-color: var(--teal);
+            grid-row: span 2;
+        }
+
+        .service-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(10, 124, 110, 0.2);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--teal-light);
+            margin-bottom: 24px;
+            transition: all 0.3s;
+        }
+
+        .service-card.featured .service-icon {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .service-card:hover .service-icon {
+            background: var(--teal);
+            color: white;
+            transform: rotate(-5deg) scale(1.1);
+        }
+
+        .service-title {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .service-desc {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.55);
+            line-height: 1.65;
+            margin-bottom: 20px;
+        }
+
+        .service-card.featured .service-desc {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .service-link {
+            font-size: 0.82rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            color: var(--teal-light);
+            text-decoration: none;
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: gap 0.3s;
+        }
+
+        .service-card.featured .service-link {
+            color: var(--gold-light);
+        }
+
+        .service-link:hover {
+            gap: 14px;
+        }
+
+        .service-price-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--gold);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+
+        /* ===================== Z-PATTERN SECTION ===================== */
+        .z-pattern-section {
+            padding: 100px 0;
+            background: var(--cream);
+        }
+
+        .z-row {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+            margin-bottom: 80px;
+        }
+
+        .z-row:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .z-content {
+            flex: 1;
+        }
+
+        .z-image {
+            flex: 1;
+            border-radius: 24px;
+            overflow: hidden;
+            position: relative;
+            height: 400px;
+            flex-shrink: 0;
+        }
+
+        .z-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .z-image:hover img {
+            transform: scale(1.06);
+        }
+
+        .z-image-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(10, 124, 110, 0.3), transparent);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .z-image:hover .z-image-overlay {
+            opacity: 1;
+        }
+
+        .z-feature-list {
+            list-style: none;
+            margin-top: 24px;
+        }
+
+        .z-feature-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            font-size: 0.95rem;
+            color: var(--charcoal);
+        }
+
+        .z-feature-list li:last-child {
+            border-bottom: none;
+        }
+
+        .z-check {
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+            background: var(--teal-pale);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            color: var(--teal);
+            margin-top: 2px;
+        }
+
+        .z-image-label {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(10, 30, 28, 0.75);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .z-image-label span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--gold);
+            display: inline-block;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.5;
+                transform: scale(1.4);
+            }
+        }
+
+        /* ===================== TESTIMONIALS ===================== */
+        .testimonials-section {
+            padding: 100px 0;
+            background: linear-gradient(135deg, var(--teal) 0%, var(--charcoal) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .testimonials-section::after {
+            content: '"';
+            position: absolute;
+            top: -40px;
+            right: 60px;
+            font-family: var(--font-display);
+            font-size: 30rem;
+            color: rgba(255, 255, 255, 0.03);
+            line-height: 1;
+            pointer-events: none;
+        }
+
+        .testimonials-section .section-title {
+            color: white;
+        }
+
+        .testimonials-section .section-label {
+            color: var(--gold-light);
+        }
+
+        .testimonials-track-wrap {
+            overflow: hidden;
+            margin-top: 60px;
+            position: relative;
+        }
+
+        .testimonials-track {
+            display: flex;
+            gap: 28px;
+            transition: transform 0.6s cubic-bezier(.645, .045, .355, 1.000);
+        }
+
+        .testimonial-card {
+            flex: 0 0 380px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 24px;
+            padding: 36px 32px;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .testimonial-card:hover {
+            background: rgba(255, 255, 255, 0.13);
+            transform: translateY(-6px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .test-stars {
+            color: var(--gold);
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+        }
+
+        .test-text {
+            color: rgba(255, 255, 255, 0.82);
+            font-size: 0.95rem;
+            line-height: 1.75;
+            margin-bottom: 24px;
+        }
+
+        .test-author {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .test-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            color: white;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .test-name {
+            font-weight: 600;
+            color: white;
+            font-size: 0.95rem;
+        }
+
+        .test-role {
+            font-size: 0.78rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .test-nav-btns {
+            display: flex;
+            gap: 12px;
+            margin-top: 40px;
+            justify-content: center;
+        }
+
+        .test-btn {
+            width: 46px;
+            height: 46px;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .test-btn:hover {
+            background: var(--gold);
+            border-color: var(--gold);
+            transform: scale(1.1);
+        }
+
+        /* ===================== TEAM GRID ===================== */
+        .team-section {
+            padding: 100px 0;
+            background: var(--white);
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 28px;
+            margin-top: 60px;
+        }
+
+        .team-card {
+            border-radius: 20px;
+            overflow: hidden;
+            background: var(--cream);
+            transition: all 0.4s cubic-bezier(.175, .885, .32, 1.275);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .team-card:hover {
+            transform: translateY(-12px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .team-img {
+            height: 280px;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--teal-pale), var(--light-gray));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            position: relative;
+        }
+
+        .team-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(10, 124, 110, 0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .team-card:hover .team-overlay {
+            opacity: 1;
+        }
+
+        .team-social-btn {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            transform: translateY(10px);
+        }
+
+        .team-card:hover .team-social-btn {
+            transform: translateY(0);
+        }
+
+        .team-social-btn:hover {
+            background: var(--gold);
+            border-color: var(--gold);
+        }
+
+        .team-info {
+            padding: 20px 22px 22px;
+        }
+
+        .team-name {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            color: var(--dark);
+            margin-bottom: 4px;
+        }
+
+        .team-role {
+            font-size: 0.8rem;
+            color: var(--teal);
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        .team-exp {
+            font-size: 0.78rem;
+            color: var(--gray);
+        }
+
+        /* ===================== APPOINTMENT SECTION ===================== */
+        .appointment-section {
+            padding: 100px 0;
+            background: var(--cream);
+        }
+
+        .appointment-wrapper {
+            background: white;
+            border-radius: 32px;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .apt-left {
+            background: var(--teal);
+            padding: 60px 50px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .apt-left::before {
+            content: '';
+            position: absolute;
+            bottom: -100px;
+            right: -100px;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.07);
+            border-radius: 50%;
+        }
+
+        .apt-left h2 {
+            font-family: var(--font-display);
+            font-size: 2.4rem;
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+
+        .apt-left p {
+            color: rgba(255, 255, 255, 0.75);
+            line-height: 1.7;
+            margin-bottom: 36px;
+        }
+
+        .apt-info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        .apt-info-icon {
+            width: 44px;
+            height: 44px;
+            flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            color: var(--gold-light);
+        }
+
+        .apt-info-text h6 {
+            font-size: 0.78rem;
+            opacity: 0.6;
+            margin-bottom: 2px;
+        }
+
+        .apt-info-text p {
+            margin: 0;
+            font-size: 0.92rem;
+            font-weight: 500;
+        }
+
+        .apt-right {
+            padding: 60px 50px;
+        }
+
+        .apt-right h3 {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            color: var(--dark);
+            margin-bottom: 6px;
+        }
+
+        .apt-right p {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 32px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label-custom {
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--charcoal);
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .form-control-custom {
+            width: 100%;
+            border: 2px solid var(--light-gray);
+            border-radius: 12px;
+            padding: 13px 18px;
+            font-family: var(--font-body);
+            font-size: 0.92rem;
+            color: var(--dark);
+            background: var(--cream);
+            transition: all 0.3s;
+            outline: none;
+        }
+
+        .form-control-custom:focus {
+            border-color: var(--teal);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(10, 124, 110, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .btn-submit {
+            width: 100%;
+            background: var(--teal);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .btn-submit:hover {
+            background: var(--teal-light);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(10, 124, 110, 0.3);
+        }
+
+        .btn-submit .submit-icon {
+            transition: transform 0.3s;
+        }
+
+        .btn-submit:hover .submit-icon {
+            transform: translateX(4px);
+        }
+
+        .form-success {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .form-success .success-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--teal-pale);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--teal);
+            margin: 0 auto 20px;
+        }
+
+        .success-animate {
+            animation: successPop 0.6s cubic-bezier(.175, .885, .32, 1.275) forwards;
+        }
+
+        @keyframes successPop {
+            from {
+                transform: scale(0);
+            }
+
+            to {
+                transform: scale(1);
+            }
+        }
+
+        /* Service picker pills */
+        .service-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .service-pill {
+            padding: 7px 16px;
+            border: 2px solid var(--light-gray);
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--gray);
+            cursor: pointer;
+            transition: all 0.2s;
+            background: transparent;
+        }
+
+        .service-pill.active,
+        .service-pill:hover {
+            border-color: var(--teal);
+            color: var(--teal);
+            background: var(--teal-pale);
+        }
+
+        /* ===================== FAQ ===================== */
+        .faq-section {
+            padding: 100px 0;
+            background: var(--white);
+        }
+
+        .faq-item {
+            border-bottom: 1px solid var(--light-gray);
+            padding: 4px 0;
+        }
+
+        .faq-question {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 0;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--dark);
+            gap: 20px;
+            list-style: none;
+            transition: color 0.2s;
+        }
+
+        .faq-question:hover {
+            color: var(--teal);
+        }
+
+        .faq-icon {
+            width: 32px;
+            height: 32px;
+            flex-shrink: 0;
+            border: 2px solid var(--light-gray);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: var(--gray);
+            transition: all 0.3s;
+        }
+
+        .faq-item.open .faq-icon {
+            background: var(--teal);
+            border-color: var(--teal);
+            color: white;
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.3s;
+            font-size: 0.92rem;
+            color: var(--gray);
+            line-height: 1.75;
+        }
+
+        .faq-item.open .faq-answer {
+            max-height: 200px;
+            padding-bottom: 20px;
+        }
+
+        /* ===================== FOOTER ===================== */
+        .footer {
+            background: var(--dark);
+            padding: 80px 0 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--teal), var(--gold), var(--teal));
+            background-size: 200% 100%;
+            animation: gradientSlide 3s linear infinite;
+        }
+
+        @keyframes gradientSlide {
+            0% {
+                background-position: 0% 0%;
+            }
+
+            100% {
+                background-position: 200% 0%;
+            }
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1.5fr;
+            gap: 50px;
+            margin-bottom: 60px;
+        }
+
+        .footer-brand {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            color: white;
+            margin-bottom: 16px;
+        }
+
+        .footer-desc {
+            color: rgba(255, 255, 255, 0.45);
+            font-size: 0.875rem;
+            line-height: 1.75;
+            margin-bottom: 28px;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 10px;
+        }
+
+        .footer-social-link {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .footer-social-link:hover {
+            background: var(--teal);
+            border-color: var(--teal);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .footer-heading {
+            font-size: 0.72rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--gold);
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.875rem;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-links a::before {
+            content: '';
+            width: 0;
+            height: 1px;
+            background: var(--teal-light);
+            transition: width 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+            padding-left: 6px;
+        }
+
+        .footer-links a:hover::before {
+            width: 14px;
+        }
+
+        .footer-newsletter-form {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .footer-input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 12px 16px;
+            color: white;
+            font-family: var(--font-body);
+            font-size: 0.85rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .footer-input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .footer-input:focus {
+            border-color: var(--teal);
+            background: rgba(10, 124, 110, 0.1);
+        }
+
+        .footer-subscribe-btn {
+            background: var(--gold);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 0 18px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .footer-subscribe-btn:hover {
+            background: var(--gold-light);
+            transform: translateY(-2px);
+        }
+
+        .footer-bar {
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 24px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .footer-copy {
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 0.8rem;
+        }
+
+        .footer-bar-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-bar-links a {
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 0.8rem;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-bar-links a:hover {
+            color: var(--teal-light);
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 500;
+            width: 48px;
+            height: 48px;
+            background: var(--teal);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            box-shadow: 0 8px 20px rgba(10, 124, 110, 0.4);
+            transition: all 0.3s;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(10px);
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            pointer-events: all;
+            transform: translateY(0);
+        }
+
+        .back-to-top:hover {
+            background: var(--gold);
+            transform: translateY(-3px);
+        }
+
+        /* ===================== INTERACTIVE TOOTH DIAGRAM ===================== */
+        .smile-meter-section {
+            padding: 80px 0;
+            background: var(--teal-pale);
+        }
+
+        .smile-meter-wrap {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+        }
+
+        .smile-desc {
+            flex: 1;
+        }
+
+        .smile-quiz {
+            flex: 1;
+        }
+
+        .quiz-question {
+            background: white;
+            border-radius: 16px;
+            padding: 28px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            display: none;
+        }
+
+        .quiz-question.active {
+            display: block;
+            animation: fadeSlide 0.4s ease;
+        }
+
+        @keyframes fadeSlide {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .quiz-q-num {
+            font-size: 0.72rem;
+            color: var(--teal);
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .quiz-q-text {
+            font-size: 1rem;
+            color: var(--dark);
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .quiz-option {
+            border: 2px solid var(--light-gray);
+            border-radius: 10px;
+            padding: 12px 18px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: var(--charcoal);
+            transition: all 0.2s;
+            background: transparent;
+            text-align: left;
+        }
+
+        .quiz-option:hover,
+        .quiz-option.selected {
+            border-color: var(--teal);
+            background: var(--teal-pale);
+            color: var(--teal);
+        }
+
+        .quiz-progress {
+            height: 6px;
+            background: var(--light-gray);
+            border-radius: 3px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .quiz-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--teal), var(--gold));
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        .quiz-result {
+            display: none;
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .quiz-result.show {
+            display: block;
+            animation: fadeSlide 0.4s ease;
+        }
+
+        .quiz-score-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: conic-gradient(var(--teal) 0%, var(--light-gray) 0%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            position: relative;
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--teal);
+        }
+
+        .quiz-score-circle::before {
+            content: '';
+            width: 78px;
+            height: 78px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .quiz-score-circle span {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ===================== ANIMATIONS ===================== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-40px);
+            transition: all 0.7s ease;
+        }
+
+        .reveal-left.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(40px);
+            transition: all 0.7s ease;
+        }
+
+        .reveal-right.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* ===================== RESPONSIVE ===================== */
+        @media (max-width: 991px) {
+            .services-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .service-card.featured {
+                grid-row: auto;
+            }
+
+            .team-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .appointment-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .apt-left {
+                padding: 40px 36px;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .f-row-1,
+            .f-row-2 {
+                flex-direction: column;
+            }
+
+            .f-vertical {
+                width: 100%;
+                flex-direction: row;
+                overflow-x: auto;
+            }
+
+            .smile-meter-wrap {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .hero-content {
+                padding: 0 24px;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .team-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .z-row,
+            .z-row:nth-child(even) {
+                flex-direction: column;
+            }
+
+            .z-image {
+                width: 100%;
+            }
+
+            .carousel-dots {
+                left: 24px;
+            }
+
+            .carousel-nav {
+                right: 24px;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bar {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .apt-right {
+                padding: 36px 28px;
+            }
+
+            .stat-row {
+                flex-direction: column;
+                gap: 20px;
+                padding: 20px;
+            }
+
+            .stat-divider {
+                display: none;
+            }
+
+            .stat-item {
+                padding: 10px 0;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            }
+
+            .stat-item:last-child {
+                border-bottom: none;
+            }
+
+            body {
+                cursor: auto;
+            }
+
+            .cursor,
+            .cursor-follower {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Custom Cursor -->
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-follower" id="cursorFollower"></div>
+
+    <!-- Back to Top -->
+    <button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- ===================== NAVBAR ===================== -->
+    <nav class="navbar-custom" id="navbar">
+        <div class="container-xl">
+            <div class="d-flex align-items-center justify-content-between">
+                <a href="#" class="navbar-brand-text text-decoration-none">
+                    <div class="navbar-brand-icon"><i class="fas fa-tooth"></i></div>
+                    SmileCraft
+                </a>
+                <!-- Desktop Nav -->
+                <div class="d-none d-lg-flex align-items-center gap-2" id="navLinks">
+                    <a href="#services" class="nav-link-custom">Services</a>
+                    <a href="#about" class="nav-link-custom">About</a>
+                    <a href="#team" class="nav-link-custom">Team</a>
+                    <a href="#testimonials" class="nav-link-custom">Reviews</a>
+                    <a href="#faq" class="nav-link-custom">FAQ</a>
+                    <a href="#appointment" class="nav-link-custom btn-nav ms-2">Book Now</a>
+                </div>
+                <!-- Mobile Toggler -->
+                <button class="navbar-toggler-custom d-lg-none" id="mobileToggler">
+                    <span class="toggler-icon"></span>
+                    <span class="toggler-icon"></span>
+                    <span class="toggler-icon"></span>
+                </button>
+            </div>
+            <!-- Mobile Menu -->
+            <div class="d-lg-none" id="mobileMenu"
+                style="display:none!important; overflow:hidden; max-height:0; transition:max-height 0.4s ease;">
+                <div style="padding: 20px 0; display:flex; flex-direction:column; gap:4px;">
+                    <a href="#services" class="nav-link-custom" style="color:var(--dark)!important;">Services</a>
+                    <a href="#about" class="nav-link-custom" style="color:var(--dark)!important;">About</a>
+                    <a href="#team" class="nav-link-custom" style="color:var(--dark)!important;">Team</a>
+                    <a href="#testimonials" class="nav-link-custom" style="color:var(--dark)!important;">Reviews</a>
+                    <a href="#faq" class="nav-link-custom" style="color:var(--dark)!important;">FAQ</a>
+                    <a href="#appointment" class="nav-link-custom btn-nav d-inline-block mt-2"
+                        style="width:fit-content;">Book Now</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ===================== HERO CAROUSEL ===================== -->
+    <section class="hero-carousel" id="home">
+        <!-- Slide 1 -->
+        <div class="slide active" id="slide-0">
+            <div class="slide-bg"
+                style="background-image: url('https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=1600&q=80&auto=format&fit=crop');">
+            </div>
+            <div class="slide-overlay"></div>
+            <div class="hero-content">
+                <div class="hero-tag">✦ Award-Winning Dental Studio</div>
+                <h1 class="hero-title">Your Perfect Smile Starts Here</h1>
+                <p class="hero-desc">Experience world-class dental care where cutting-edge technology meets
+                    compassionate expertise. Transform your smile with confidence.</p>
+                <div class="hero-btns">
+                    <a href="#appointment" class="btn-primary-custom"><i class="fas fa-calendar-check"></i> Book Free
+                        Consult</a>
+                    <a href="#services" class="btn-outline-custom"><i class="fas fa-play-circle"></i> Our Services</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="slide" id="slide-1">
+            <div class="slide-bg"
+                style="background-image: url('https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=1600&q=80&auto=format&fit=crop');">
+            </div>
+            <div class="slide-overlay"></div>
+            <div class="hero-content">
+                <div class="hero-tag">✦ Advanced Cosmetic Dentistry</div>
+                <h1 class="hero-title">Brighten Your Smile, Lift Your Confidence</h1>
+                <p class="hero-desc">From veneers to whitening, our cosmetic treatments are designed to give you the
+                    radiant smile you deserve — pain-free and lasting.</p>
+                <div class="hero-btns">
+                    <a href="#services" class="btn-primary-custom"><i class="fas fa-star"></i> Explore Treatments</a>
+                    <a href="#team" class="btn-outline-custom"><i class="fas fa-user-md"></i> Meet Our Team</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="slide" id="slide-2">
+            <div class="slide-bg"
+                style="background-image: url('https://images.unsplash.com/photo-1598256989800-fe5f95da9787?w=1600&q=80&auto=format&fit=crop');">
+            </div>
+            <div class="slide-overlay"></div>
+            <div class="hero-content">
+                <div class="hero-tag">✦ Family-Friendly Care</div>
+                <h1 class="hero-title">Gentle Dental Care for the Whole Family</h1>
+                <p class="hero-desc">From toddlers to grandparents, we create a warm, anxiety-free environment where
+                    every family member feels safe and cared for.</p>
+                <div class="hero-btns">
+                    <a href="#appointment" class="btn-primary-custom"><i class="fas fa-heart"></i> Schedule Today</a>
+                    <a href="#faq" class="btn-outline-custom"><i class="fas fa-question-circle"></i> Learn More</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="carousel-dots">
+            <div class="dot active" onclick="goToSlide(0)"></div>
+            <div class="dot" onclick="goToSlide(1)"></div>
+            <div class="dot" onclick="goToSlide(2)"></div>
+        </div>
+        <div class="carousel-nav">
+            <button class="carousel-btn" onclick="prevSlide()"><i class="fas fa-arrow-left"></i></button>
+            <button class="carousel-btn" onclick="nextSlide()"><i class="fas fa-arrow-right"></i></button>
+        </div>
+        <div class="hero-scroll-hint">
+            <i class="fas fa-chevron-down"></i>
+            Scroll
+        </div>
+    </section>
+
+    <!-- ===================== F-PATTERN SECTION ===================== -->
+    <section class="f-pattern-section" id="about">
+        <div class="container-xl">
+            <!-- F: Full width top row -->
+            <div class="f-row-1 reveal">
+                <div style="flex:1">
+                    <div class="section-label">About SmileCraft</div>
+                    <h2 class="section-title">Two Decades of Trusted Dental Excellence</h2>
+                    <p class="section-desc">Since 2003, SmileCraft Dental Studio has been the premier destination for
+                        comprehensive oral health care. Our philosophy merges clinical precision with genuine warmth,
+                        ensuring every visit is as comfortable as it is effective.</p>
+                    <div class="mt-4 d-flex gap-3 flex-wrap">
+                        <a href="#appointment" class="btn-primary-custom"
+                            style="background:var(--teal); border-color:var(--teal); font-size:0.9rem;">
+                            <i class="fas fa-calendar"></i> Book a Visit
+                        </a>
+                        <a href="#team" class="btn-outline-custom"
+                            style="color:var(--dark); border-color:var(--light-gray); font-size:0.9rem;">
+                            <i class="fas fa-users"></i> Meet the Team
+                        </a>
+                    </div>
+                </div>
+                <div class="f-image-block">
+                    <img src="https://images.unsplash.com/photo-1606811971618-4486d14f3f99?w=800&q=80&auto=format&fit=crop"
+                        alt="Dental clinic">
+                    <div class="f-image-badge"><i class="fas fa-award"></i> #1 in City 2024</div>
+                </div>
+            </div>
+
+            <!-- F: Partial second row + stat band -->
+            <div class="f-row-2 reveal" style="transition-delay:0.15s">
+                <div class="f-vertical">
+                    <div class="f-card">
+                        <div class="f-card-icon"><i class="fas fa-shield-alt"></i></div>
+                        <h5>Pain-Free Guarantee</h5>
+                        <p>Advanced anesthesia and sedation options ensure virtually pain-free procedures for all
+                            patients.</p>
+                    </div>
+                    <div class="f-card">
+                        <div class="f-card-icon"><i class="fas fa-microscope"></i></div>
+                        <h5>Digital X-Ray & 3D Scan</h5>
+                        <p>State-of-the-art imaging technology providing accurate diagnostics with 90% less radiation.
+                        </p>
+                    </div>
+                    <div class="f-card">
+                        <div class="f-card-icon"><i class="fas fa-clock"></i></div>
+                        <h5>Same-Day Crowns</h5>
+                        <p>CEREC technology allows us to design, mill, and fit your crown in a single appointment.</p>
+                    </div>
+                </div>
+                <div class="f-stat-row">
+                    <div class="stat-item">
+                        <div class="stat-num"><span class="count-up" data-target="12000">0</span>+</div>
+                        <div class="stat-label">Happy Patients</div>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <div class="stat-num"><span class="count-up" data-target="22">0</span>yrs</div>
+                        <div class="stat-label">Experience</div>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <div class="stat-num"><span class="count-up" data-target="98">0</span>%</div>
+                        <div class="stat-label">Satisfaction Rate</div>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <div class="stat-num"><span class="count-up" data-target="15">0</span>+</div>
+                        <div class="stat-label">Specialist Doctors</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== SERVICES GRID SECTION ===================== -->
+    <section class="services-section" id="services">
+        <div class="container-xl">
+            <div class="row reveal">
+                <div class="col-lg-6">
+                    <div class="section-label">What We Offer</div>
+                    <h2 class="section-title">Comprehensive Dental Services for Every Need</h2>
+                </div>
+                <div class="col-lg-5 offset-lg-1">
+                    <p class="section-desc" style="margin-top:10px;">From routine cleanings to full-mouth
+                        reconstructions, our specialists handle every aspect of your oral health with meticulous care.
+                    </p>
+                </div>
+            </div>
+
+            <div class="services-grid">
+                <!-- Featured Card -->
+                <div class="service-card featured reveal" style="transition-delay:0.1s">
+                    <div class="service-icon"><i class="fas fa-teeth-open"></i></div>
+                    <div class="service-title" style="font-size:1.5rem;">Smile Design & Makeover</div>
+                    <p class="service-desc">Our signature full-smile makeover combines veneers, whitening, contouring,
+                        and orthodontic treatment into one seamless treatment plan crafted exclusively for you.</p>
+                    <div class="mt-4 mb-4" style="background:rgba(255,255,255,0.1); border-radius:12px; padding:18px;">
+                        <div style="font-size:0.78rem; color:rgba(255,255,255,0.6); margin-bottom:8px;">Includes:</div>
+                        <div style="display:flex; flex-wrap:wrap; gap:8px;">
+                            <span
+                                style="background:rgba(255,255,255,0.15); padding:4px 12px; border-radius:20px; font-size:0.75rem; color:rgba(255,255,255,0.85);">Digital
+                                Preview</span>
+                            <span
+                                style="background:rgba(255,255,255,0.15); padding:4px 12px; border-radius:20px; font-size:0.75rem; color:rgba(255,255,255,0.85);">Veneers</span>
+                            <span
+                                style="background:rgba(255,255,255,0.15); padding:4px 12px; border-radius:20px; font-size:0.75rem; color:rgba(255,255,255,0.85);">Whitening</span>
+                            <span
+                                style="background:rgba(255,255,255,0.15); padding:4px 12px; border-radius:20px; font-size:0.75rem; color:rgba(255,255,255,0.85);">Contouring</span>
+                        </div>
+                    </div>
+                    <a href="#appointment" class="service-link">Schedule Consultation <i
+                            class="fas fa-arrow-right"></i></a>
+                </div>
+
+                <div class="service-card reveal" style="transition-delay:0.15s">
+                    <div class="service-price-badge">Popular</div>
+                    <div class="service-icon"><i class="fas fa-tooth"></i></div>
+                    <div class="service-title">Teeth Whitening</div>
+                    <p class="service-desc">Professional in-office whitening that brightens your smile by up to 8 shades
+                        in just 60 minutes.</p>
+                    <a href="#appointment" class="service-link">Book Now <i class="fas fa-arrow-right"></i></a>
+                </div>
+
+                <div class="service-card reveal" style="transition-delay:0.2s">
+                    <div class="service-icon"><i class="fas fa-smile"></i></div>
+                    <div class="service-title">Porcelain Veneers</div>
+                    <p class="service-desc">Ultra-thin custom shells that conceal chips, stains, and gaps for a
+                        permanently flawless smile.</p>
+                    <a href="#appointment" class="service-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                </div>
+
+                <div class="service-card reveal" style="transition-delay:0.25s">
+                    <div class="service-icon"><i class="fas fa-syringe"></i></div>
+                    <div class="service-title">Dental Implants</div>
+                    <p class="service-desc">Permanent tooth replacements that look, feel, and function exactly like
+                        natural teeth with lifetime durability.</p>
+                    <a href="#appointment" class="service-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                </div>
+
+                <div class="service-card reveal" style="transition-delay:0.3s">
+                    <div class="service-price-badge">New</div>
+                    <div class="service-icon"><i class="fas fa-align-center"></i></div>
+                    <div class="service-title">Invisalign Clear Aligners</div>
+                    <p class="service-desc">Discreet, removable orthodontic treatment that straightens teeth without
+                        traditional metal braces.</p>
+                    <a href="#appointment" class="service-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                </div>
+
+                <div class="service-card reveal" style="transition-delay:0.35s">
+                    <div class="service-icon"><i class="fas fa-heartbeat"></i></div>
+                    <div class="service-title">Preventive Care</div>
+                    <p class="service-desc">Regular cleanings, exams, fluoride treatments, and sealants to keep your
+                        oral health in peak condition.</p>
+                    <a href="#appointment" class="service-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== Z-PATTERN SECTION ===================== -->
+    <section class="z-pattern-section" id="treatments">
+        <div class="container-xl">
+            <div class="text-center mb-5 reveal">
+                <div class="section-label">Our Approach</div>
+                <h2 class="section-title">Why Patients Choose SmileCraft</h2>
+            </div>
+
+            <!-- Z Row 1: Image LEFT, Text RIGHT -->
+            <div class="z-row reveal-left">
+                <div class="z-image">
+                    <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=800&q=80&auto=format&fit=crop"
+                        alt="Advanced technology">
+                    <div class="z-image-overlay"></div>
+                    <div class="z-image-label"><span></span> Live Technology</div>
+                </div>
+                <div class="z-content">
+                    <div class="section-label">Step 01</div>
+                    <h3 class="section-title" style="font-size:2rem;">Cutting-Edge Technology You Can Trust</h3>
+                    <p class="section-desc">Our clinic is equipped with the latest dental innovations — 3D cone beam CT
+                        scans, digital impressions, laser dentistry, and AI-assisted diagnostics — all designed to
+                        deliver precise, comfortable treatment.</p>
+                    <ul class="z-feature-list">
+                        <li>
+                            <div class="z-check"><i class="fas fa-check"></i></div>CEREC same-day restorations eliminate
+                            multiple visits
+                        </li>
+                        <li>
+                            <div class="z-check"><i class="fas fa-check"></i></div>Digital smile preview before any
+                            cosmetic procedure
+                        </li>
+                        <li>
+                            <div class="z-check"><i class="fas fa-check"></i></div>Radiation-reduced digital X-rays for
+                            safer imaging
+                        </li>
+                        <li>
+                            <div class="z-check"><i class="fas fa-check"></i></div>Laser gum therapy for virtually
+                            pain-free treatment
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Z Row 2: Text LEFT, Image RIGHT -->
+            <div class="z-row reveal-right">
+                <div class="z-image">
+                    <img src="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=800&q=80&auto=format&fit=crop"
+                        alt="Patient care">
+                    <div class="z-image-overlay"></div>
+                    <div class="z-image-label"><span></span> Patient-Centered</div>
+                </div>
+                <div class="z-content">
+                    <div class="section-label">Step 02</div>
+                    <h3 class="section-title" style="font-size:2rem;">A Comfort-First Patient Experience</h3>
+                    <p class="section-desc">We've reimagined the dental visit from the ground up. Our spa-like
+                        environment, sedation options, and patient education approach ensure you feel informed, relaxed,
+                        and genuinely cared for from your first call to post-treatment follow-up.</p>
+                    <ul class="z-feature-list">
+                        <li>
+                            <div class="z-check"><i class="fas fa-check"></i></div>Anxiety-free sedation dentistry
+                            available
+                        </li>
+                        <li>
+                            <div class="z-check"><i class="fas fa-check"></i></div>Warm towels, entertainment, and
+                            noise-canceling headphones
+                        </li>
+                        <li>
+                            <div class="z-check"><i class="fas fa-check"></i></div>Transparent pricing — no hidden fees,
+                            ever
+                        </li>
+                        <li>
+                            <div class="z-check"><i class="fas fa-check"></i></div>24/7 emergency dental care for
+                            existing patients
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Z Row 3: Image LEFT, Text RIGHT -->
+            <div class="z-row reveal-left" style="margin-bottom:0">
+                <div class="z-image">
+                    <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&q=80&auto=format&fit=crop"
+                        alt="Specialists">
+                    <div class="z-image-overlay"></div>
+                    <div class="z-image-label"><span></span> Expert Specialists</div>
+                </div>
+                <div class="z-content">
+                    <div class="section-label">Step 03</div>
+                    <h3 class="section-title" style="font-size:2rem;">Specialists in Every Dental Field</h3>
+                    <p class="section-desc">From general dentistry to complex oral surgery, our team of board-certified
+                        specialists covers every discipline under one roof. No referrals, no strangers — just continuity
+                        of care from people who know your name.</p>
+                    <ul class="z-feature-list">
+                        <li>
+                            <div class="z-check"><i class="fas fa-check"></i></div>Orthodontists, endodontists, and
+                            periodontists on-site
+                        </li>
+                        <li>
+                            <div class="z-check"><i class="fas fa-check"></i></div>Pediatric dentistry for children ages
+                            2 and up
+                        </li>
+                        <li>
+                            <div class="z-check"><i class="fas fa-check"></i></div>Oral surgeons for implants and
+                            complex extractions
+                        </li>
+                        <li>
+                            <div class="z-check"><i class="fas fa-check"></i></div>Continuing education — our doctors
+                            train globally
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== SMILE HEALTH QUIZ ===================== -->
+    <section class="smile-meter-section">
+        <div class="container-xl">
+            <div class="smile-meter-wrap">
+                <div class="smile-desc reveal-left">
+                    <div class="section-label">Interactive Tool</div>
+                    <h2 class="section-title">How Healthy Is Your Smile?</h2>
+                    <p class="section-desc">Answer 4 quick questions and we'll give you a personalized smile health
+                        score with tailored recommendations. Takes under 60 seconds.</p>
+                    <div class="mt-4" style="display:flex; flex-direction:column; gap:12px;">
+                        <div style="display:flex; align-items:center; gap:14px;">
+                            <div
+                                style="width:40px; height:40px; background:var(--teal); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:0.8rem; font-weight:700; flex-shrink:0;">
+                                1</div>
+                            <div style="font-size:0.9rem; color:var(--charcoal);">Answer 4 quick questions</div>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:14px;">
+                            <div
+                                style="width:40px; height:40px; background:var(--teal); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:0.8rem; font-weight:700; flex-shrink:0;">
+                                2</div>
+                            <div style="font-size:0.9rem; color:var(--charcoal);">Get your personalized score</div>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:14px;">
+                            <div
+                                style="width:40px; height:40px; background:var(--gold); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:0.8rem; font-weight:700; flex-shrink:0;">
+                                3</div>
+                            <div style="font-size:0.9rem; color:var(--charcoal);">Book a free consultation</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="smile-quiz reveal-right">
+                    <div class="quiz-progress">
+                        <div class="quiz-progress-bar" id="quizProgress" style="width:0%"></div>
+                    </div>
+
+                    <div class="quiz-question active" id="q1">
+                        <div class="quiz-q-num">Question 1 of 4</div>
+                        <div class="quiz-q-text">How often do you brush your teeth?</div>
+                        <div class="quiz-options">
+                            <button class="quiz-option" onclick="selectOption(this, 'q1', 3)">Twice a day or
+                                more</button>
+                            <button class="quiz-option" onclick="selectOption(this, 'q1', 2)">Once a day</button>
+                            <button class="quiz-option" onclick="selectOption(this, 'q1', 1)">A few times a
+                                week</button>
+                            <button class="quiz-option" onclick="selectOption(this, 'q1', 0)">Rarely</button>
+                        </div>
+                    </div>
+
+                    <div class="quiz-question" id="q2">
+                        <div class="quiz-q-num">Question 2 of 4</div>
+                        <div class="quiz-q-text">When did you last visit a dentist?</div>
+                        <div class="quiz-options">
+                            <button class="quiz-option" onclick="selectOption(this, 'q2', 3)">Within the last 6
+                                months</button>
+                            <button class="quiz-option" onclick="selectOption(this, 'q2', 2)">6–12 months ago</button>
+                            <button class="quiz-option" onclick="selectOption(this, 'q2', 1)">1–2 years ago</button>
+                            <button class="quiz-option" onclick="selectOption(this, 'q2', 0)">Over 2 years ago</button>
+                        </div>
+                    </div>
+
+                    <div class="quiz-question" id="q3">
+                        <div class="quiz-q-num">Question 3 of 4</div>
+                        <div class="quiz-q-text">Do you experience any tooth sensitivity or pain?</div>
+                        <div class="quiz-options">
+                            <button class="quiz-option" onclick="selectOption(this, 'q3', 3)">No, none at all</button>
+                            <button class="quiz-option" onclick="selectOption(this, 'q3', 2)">Mild sensitivity
+                                occasionally</button>
+                            <button class="quiz-option" onclick="selectOption(this, 'q3', 1)">Frequent
+                                sensitivity</button>
+                            <button class="quiz-option" onclick="selectOption(this, 'q3', 0)">Significant pain</button>
+                        </div>
+                    </div>
+
+                    <div class="quiz-question" id="q4">
+                        <div class="quiz-q-num">Question 4 of 4</div>
+                        <div class="quiz-q-text">How would you rate your smile confidence?</div>
+                        <div class="quiz-options">
+                            <button class="quiz-option" onclick="selectOption(this, 'q4', 3)">Very confident — I love my
+                                smile!</button>
+                            <button class="quiz-option" onclick="selectOption(this, 'q4', 2)">Fairly confident, minor
+                                concerns</button>
+                            <button class="quiz-option" onclick="selectOption(this, 'q4', 1)">Self-conscious about a few
+                                things</button>
+                            <button class="quiz-option" onclick="selectOption(this, 'q4', 0)">I avoid smiling in
+                                photos</button>
+                        </div>
+                    </div>
+
+                    <div class="quiz-result" id="quizResult">
+                        <div class="quiz-score-circle" id="scoreCircle"><span id="scoreText">0%</span></div>
+                        <h4 style="font-family:var(--font-display); color:var(--dark); margin-bottom:10px;"
+                            id="scoreTitle">Great Smile Health!</h4>
+                        <p style="color:var(--gray); font-size:0.9rem;" id="scoreDesc">Your oral health is in great
+                            shape. Keep up the excellent routine and schedule your next checkup to maintain that radiant
+                            smile.</p>
+                        <a href="#appointment" class="btn-primary-custom"
+                            style="background:var(--teal); border-color:var(--teal); margin-top:20px; justify-content:center;">
+                            <i class="fas fa-calendar-check"></i> Book Free Consultation
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== TEAM SECTION ===================== -->
+<section class="team-section" id="team">
+    <div class="container-xl">
+        <div class="text-center reveal">
+            <div class="section-label">Our Specialists</div>
+            <h2 class="section-title">Meet the Doctors Behind Your Smile</h2>
+            <p class="section-desc mx-auto" style="text-align:center;">Our internationally trained specialists bring
+                decades of combined experience and genuine passion for transformative dental care.</p>
+        </div>
+
+        <div class="team-grid">
+            <!-- Dr. Priya Mehta — Female -->
+            <div class="team-card reveal" style="transition-delay:0.05s">
+                <div class="team-img" style="background:linear-gradient(135deg,#e0f5f2,#b2e8e0); padding:0; overflow:hidden; position:relative;">
+                    <img src="https://media.istockphoto.com/id/1483191225/photo/happy-dental-nurse-portrait.jpg?s=612x612&w=0&k=20&c=7Tt1L4eBrwlWVIpFVhgACARrIoJgSIpFgwrHV-xya_Q="
+                        alt="Dr. Priya Mehta"
+                        style="width:100%; height:100%; object-fit:cover; display:block;" />
+                    <div class="team-overlay">
+                        <a href="#" class="team-social-btn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="team-social-btn"><i class="fas fa-envelope"></i></a>
+                        <a href="#appointment" class="team-social-btn"><i class="fas fa-calendar"></i></a>
+                    </div>
+                </div>
+                <div class="team-info">
+                    <div class="team-name">Dr. Priya Mehta</div>
+                    <div class="team-role">Chief Dental Officer</div>
+                    <div class="team-exp"><i class="fas fa-star" style="color:var(--gold);"></i> 18 yrs · Cosmetic Specialist</div>
+                </div>
+            </div>
+
+            <!-- Dr. Arjun Sharma — Male -->
+            <div class="team-card reveal" style="transition-delay:0.1s">
+                <div class="team-img" style="background:linear-gradient(135deg,#e8f4f8,#d0e9f5); padding:0; overflow:hidden; position:relative;">
+                    <img src="https://www.shutterstock.com/image-photo/profile-picture-dentist-his-coat-600nw-2628073873.jpg"
+                        alt="Dr. Arjun Sharma"
+                        style="width:100%; height:100%; object-fit:cover; display:block;" />
+                    <div class="team-overlay">
+                        <a href="#" class="team-social-btn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="team-social-btn"><i class="fas fa-envelope"></i></a>
+                        <a href="#appointment" class="team-social-btn"><i class="fas fa-calendar"></i></a>
+                    </div>
+                </div>
+                <div class="team-info">
+                    <div class="team-name">Dr. Arjun Sharma</div>
+                    <div class="team-role">Orthodontist</div>
+                    <div class="team-exp"><i class="fas fa-star" style="color:var(--gold);"></i> 12 yrs · Invisalign Expert</div>
+                </div>
+            </div>
+
+            <!-- Dr. Sneha Patel — Female -->
+            <div class="team-card reveal" style="transition-delay:0.15s">
+                <div class="team-img" style="background:linear-gradient(135deg,#f8f4e8,#f5e9d0); padding:0; overflow:hidden; position:relative;">
+                    <img src="https://img.freepik.com/premium-photo/portrait-dantist-dental-clinic_105818-94.jpg"
+                        alt="Dr. Sneha Patel"
+                        style="width:100%; height:100%; object-fit:cover; display:block;" />
+                    <div class="team-overlay">
+                        <a href="#" class="team-social-btn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="team-social-btn"><i class="fas fa-envelope"></i></a>
+                        <a href="#appointment" class="team-social-btn"><i class="fas fa-calendar"></i></a>
+                    </div>
+                </div>
+                <div class="team-info">
+                    <div class="team-name">Dr. Sneha Patel</div>
+                    <div class="team-role">Endodontist</div>
+                    <div class="team-exp"><i class="fas fa-star" style="color:var(--gold);"></i> 9 yrs · Root Canal Specialist</div>
+                </div>
+            </div>
+
+            <!-- Dr. Rahul Nair — Male -->
+            <div class="team-card reveal" style="transition-delay:0.2s">
+                <div class="team-img" style="background:linear-gradient(135deg,#f4e8f8,#e9d0f5); padding:0; overflow:hidden; position:relative;">
+                    <img src="https://static.vecteezy.com/system/resources/previews/049/536/916/non_2x/portrait-of-a-happy-male-dentist-free-photo.jpg"
+                        alt="Dr. Rahul Nair"
+                        style="width:100%; height:100%; object-fit:cover; display:block;" />
+                    <div class="team-overlay">
+                        <a href="#" class="team-social-btn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="team-social-btn"><i class="fas fa-envelope"></i></a>
+                        <a href="#appointment" class="team-social-btn"><i class="fas fa-calendar"></i></a>
+                    </div>
+                </div>
+                <div class="team-info">
+                    <div class="team-name">Dr. Rahul Nair</div>
+                    <div class="team-role">Oral Surgeon</div>
+                    <div class="team-exp"><i class="fas fa-star" style="color:var(--gold);"></i> 15 yrs · Implant Expert</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+    <!-- ===================== TESTIMONIALS ===================== -->
+    <section class="testimonials-section" id="testimonials">
+        <div class="container-xl">
+            <div class="row align-items-end reveal">
+                <div class="col-lg-6">
+                    <div class="section-label">Patient Stories</div>
+                    <h2 class="section-title">Real Smiles, Real Stories</h2>
+                </div>
+                <div class="col-lg-5 offset-lg-1">
+                    <p style="color:rgba(255,255,255,0.6); font-size:0.95rem; line-height:1.75;">Over 12,000 patients
+                        have trusted SmileCraft with their smiles. Here's what some of them have to say about the
+                        experience.</p>
+                </div>
+            </div>
+
+            <div class="testimonials-track-wrap">
+                <div class="testimonials-track" id="testimonialsTrack">
+                    <div class="testimonial-card">
+                        <div class="test-stars">★★★★★</div>
+                        <p class="test-text">I had severe dental anxiety and hadn't seen a dentist in 6 years. The
+                            SmileCraft team changed everything — from the first call to the final appointment, I felt
+                            completely at ease.</p>
+                        <div class="test-author">
+                            <div class="test-avatar">R</div>
+                            <div>
+                                <div class="test-name">Ramya Krishnan</div>
+                                <div class="test-role">Veneer Patient, Mumbai</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="test-stars">★★★★★</div>
+                        <p class="test-text">My Invisalign journey with Dr. Sharma was seamless. I saw results within 3
+                            months and the team always kept me informed. Best investment I've made in myself!</p>
+                        <div class="test-author">
+                            <div class="test-avatar">A</div>
+                            <div>
+                                <div class="test-name">Aarav Gupta</div>
+                                <div class="test-role">Invisalign Patient, Pune</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="test-stars">★★★★★</div>
+                        <p class="test-text">Got a full smile makeover for my wedding. The digital preview was
+                            incredible — I knew exactly what to expect. My photos look unreal. Couldn't be happier!</p>
+                        <div class="test-author">
+                            <div class="test-avatar">P</div>
+                            <div>
+                                <div class="test-name">Prachi Desai</div>
+                                <div class="test-role">Smile Makeover Patient</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="test-stars">★★★★★</div>
+                        <p class="test-text">The CEREC same-day crown saved me from taking multiple days off work. One
+                            visit, one crown, perfect fit. Dr. Mehta is absolutely brilliant.</p>
+                        <div class="test-author">
+                            <div class="test-avatar">V</div>
+                            <div>
+                                <div class="test-name">Vikram Shetty</div>
+                                <div class="test-role">Crown Patient, Thane</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="test-stars">★★★★★</div>
+                        <p class="test-text">My 7-year-old used to cry before every dentist visit. After one session
+                            with the pediatric team here, she actually looks forward to coming back. Pure magic.</p>
+                        <div class="test-author">
+                            <div class="test-avatar">M</div>
+                            <div>
+                                <div class="test-name">Meena Joshi</div>
+                                <div class="test-role">Parent of Pediatric Patient</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="test-nav-btns">
+                <button class="test-btn" id="testPrev"><i class="fas fa-arrow-left"></i></button>
+                <button class="test-btn" id="testNext"><i class="fas fa-arrow-right"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== APPOINTMENT SECTION ===================== -->
+    <section class="appointment-section" id="appointment">
+        <div class="container-xl">
+            <div class="appointment-wrapper reveal">
+                <div class="apt-left">
+                    <div class="section-label" style="color:rgba(255,255,255,0.7);">Get in Touch</div>
+                    <h2>Book Your Free Consultation Today</h2>
+                    <p>Fill in the form and our team will confirm your appointment within 2 hours during business hours.
+                    </p>
+                    <div class="apt-info-item">
+                        <div class="apt-info-icon"><i class="fas fa-map-marker-alt"></i></div>
+                        <div class="apt-info-text">
+                            <h6>Address</h6>
+                            <p>42, Dental Plaza, MG Road<br>Bandra West, Mumbai 400050</p>
+                        </div>
+                    </div>
+                    <div class="apt-info-item">
+                        <div class="apt-info-icon"><i class="fas fa-phone-alt"></i></div>
+                        <div class="apt-info-text">
+                            <h6>Phone</h6>
+                            <p>+91 98765 43210</p>
+                        </div>
+                    </div>
+                    <div class="apt-info-item">
+                        <div class="apt-info-icon"><i class="fas fa-clock"></i></div>
+                        <div class="apt-info-text">
+                            <h6>Working Hours</h6>
+                            <p>Mon – Sat: 9:00 AM – 7:00 PM<br>Sunday: 10:00 AM – 2:00 PM</p>
+                        </div>
+                    </div>
+                    <div class="apt-info-item">
+                        <div class="apt-info-icon"><i class="fas fa-envelope"></i></div>
+                        <div class="apt-info-text">
+                            <h6>Email</h6>
+                            <p>hello@smilecraftdental.com</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="apt-right">
+                    <h3>Request an Appointment</h3>
+                    <p>Select a service and preferred time below</p>
+
+                    <!-- Form -->
+                    <div id="appointmentForm">
+    <div style="margin-bottom:16px;">
+        <div class="form-label-custom">Select Service</div>
+        <div class="service-pills">
+            <button class="service-pill active" onclick="togglePill(this)">Checkup</button>
+            <button class="service-pill" onclick="togglePill(this)">Whitening</button>
+            <button class="service-pill" onclick="togglePill(this)">Veneers</button>
+            <button class="service-pill" onclick="togglePill(this)">Implants</button>
+            <button class="service-pill" onclick="togglePill(this)">Invisalign</button>
+            <button class="service-pill" onclick="togglePill(this)">Other</button>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group">
+            <label class="form-label-custom">First Name</label>
+            <input type="text" class="form-control-custom" placeholder="Ramya" id="fname">
+        </div>
+        <div class="form-group">
+            <label class="form-label-custom">Last Name</label>
+            <input type="text" class="form-control-custom" placeholder="Krishnan" id="lname">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group">
+            <label class="form-label-custom">Phone Number</label>
+            <input type="tel" class="form-control-custom" placeholder="+91 98765 43210" id="fphone">
+        </div>
+        <div class="form-group">
+            <label class="form-label-custom">Email Address</label>
+            <input type="email" class="form-control-custom" placeholder="you@example.com" id="femail">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group">
+            <label class="form-label-custom">Preferred Date</label>
+            <input type="date" class="form-control-custom" id="fdate">
+        </div>
+        <div class="form-group">
+            <label class="form-label-custom">Preferred Time</label>
+            <select class="form-control-custom" id="ftime">
+                <option value="">Select Date First</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="form-label-custom">Additional Notes</label>
+        <textarea class="form-control-custom" rows="3" id="fmessage"
+            placeholder="Any concerns or questions you'd like to share..."></textarea>
+    </div>
+    <button class="btn-submit" onclick="submitForm()">
+        Confirm Appointment <i class="fas fa-arrow-right submit-icon"></i>
+    </button>
+</div>
+<div class="form-success" id="formSuccess">
+    <div class="success-icon success-animate"><i class="fas fa-check"></i></div>
+    <h4 style="font-family:var(--font-display); color:var(--dark); margin-bottom:8px;">Appointment Requested!</h4>
+    <p style="color:var(--gray); font-size:0.9rem;">Thank you! We'll confirm your appointment via
+        email and phone within 2 hours. See you soon! 😊</p>
+    <button onclick="resetForm()"
+        style="margin-top:20px; background:none; border:2px solid var(--teal); color:var(--teal); padding:10px 24px; border-radius:30px; cursor:pointer; font-weight:600;">
+        Book Another
+    </button>
+</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== FAQ SECTION ===================== -->
+    <section class="faq-section" id="faq">
+        <div class="container-xl">
+            <div class="row">
+                <div class="col-lg-5 reveal-left">
+                    <div class="section-label">Got Questions?</div>
+                    <h2 class="section-title">Frequently Asked Questions</h2>
+                    <p class="section-desc">Can't find the answer you need? Our team is always happy to help.</p>
+                    <a href="tel:+919876543210" class="btn-primary-custom mt-4 d-inline-flex"
+                        style="background:var(--teal); border-color:var(--teal);">
+                        <i class="fas fa-phone-alt"></i> Call Us Now
+                    </a>
+                </div>
+                <div class="col-lg-7 reveal-right">
+                    <div id="faqList" style="margin-top:20px;">
+
+                        <div class="faq-item open">
+                            <div class="faq-question" onclick="toggleFaq(this)">
+                                Is the initial consultation really free?
+                                <div class="faq-icon"><i class="fas fa-plus"></i></div>
+                            </div>
+                            <div class="faq-answer">Yes, absolutely! Your first consultation with our dentist is
+                                completely free of charge. This includes a brief oral examination and a discussion of
+                                your dental goals. Any X-rays or detailed diagnostics will be quoted transparently
+                                before proceeding.</div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFaq(this)">
+                                Do you offer payment plans for expensive treatments?
+                                <div class="faq-icon"><i class="fas fa-plus"></i></div>
+                            </div>
+                            <div class="faq-answer">Yes! We offer flexible 0% interest payment plans for treatments
+                                above ₹15,000. We also accept all major insurance plans and work directly with your
+                                insurer to maximize your benefits. Our finance team will walk you through all options.
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFaq(this)">
+                                How long do veneers and implants typically last?
+                                <div class="faq-icon"><i class="fas fa-plus"></i></div>
+                            </div>
+                            <div class="faq-answer">With proper care, porcelain veneers last 10–15 years and can be
+                                refreshed thereafter. Dental implants, when placed correctly and maintained well, are
+                                designed to last a lifetime — many of our implant patients from 2010 still have their
+                                original implants in perfect condition.</div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFaq(this)">
+                                Is teeth whitening safe for sensitive teeth?
+                                <div class="faq-icon"><i class="fas fa-plus"></i></div>
+                            </div>
+                            <div class="faq-answer">We offer sensitivity-specific whitening protocols using
+                                lower-concentration gels combined with desensitizing agents. Most patients with
+                                sensitivity tolerate our gentle whitening program very well. We'll assess your
+                                sensitivity level before recommending any whitening treatment.</div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFaq(this)">
+                                What age should children first visit a dentist?
+                                <div class="faq-icon"><i class="fas fa-plus"></i></div>
+                            </div>
+                            <div class="faq-answer">We recommend scheduling a child's first dental visit when their
+                                first tooth appears — usually around 6 months — or by their first birthday at the
+                                latest. Early visits help establish good habits, detect issues early, and make children
+                                comfortable with dental care from a young age.</div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFaq(this)">
+                                Do you offer emergency dental care?
+                                <div class="faq-icon"><i class="fas fa-plus"></i></div>
+                            </div>
+                            <div class="faq-answer">Yes! We provide emergency dental care 7 days a week for existing
+                                patients. If you have a dental emergency — severe pain, broken tooth, lost filling, or
+                                swelling — call our emergency line at +91 98765 00000 and we'll see you the same day.
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== MAP SECTION ===================== -->
+<section style="padding: 80px 0 80px 0; background: var(--cream);">
+    <div class="container-xl">
+        <div class="text-center reveal" style="margin-bottom: 48px;">
+            <div class="section-label">Find Us</div>
+            <h2 class="section-title">Visit Our Clinic</h2>
+            <p class="section-desc mx-auto" style="text-align:center;">
+                Conveniently located in the heart of the city — easy parking, metro accessible.
+            </p>
+        </div>
+
+        <div class="reveal" style="display: grid; grid-template-columns: 1fr 340px; gap: 0; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow-lg); border: 1px solid rgba(10,124,110,0.12);">
+
+            <!-- MAP -->
+            <div style="position: relative; min-height: 460px;">
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3768.0!2d72.8777!3d19.2183!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTnCsDEzJzA2LjAiTiA3MsKwNTInMzkuNyJF!5e0!3m2!1sen!2sin!4v1234567890"
+                    width="100%"
+                    height="100%"
+                    style="border:0; display:block; min-height: 460px; filter: grayscale(20%) contrast(1.05);"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+                <!-- Map overlay pin label -->
+                <div style="position:absolute; top:20px; left:20px; background:white; border-radius:12px; padding:10px 16px; display:flex; align-items:center; gap:10px; box-shadow:0 4px 20px rgba(0,0,0,0.12);">
+                    <div style="width:32px; height:32px; background:var(--teal); border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                        <i class="fas fa-tooth" style="color:white; font-size:0.8rem;"></i>
+                    </div>
+                    <div>
+                        <div style="font-family:var(--font-display); font-weight:700; font-size:0.85rem; color:var(--dark);">SmileCraft Dental Studio</div>
+                        <div style="font-size:0.7rem; color:var(--gray);">Open Today · 9AM – 7PM</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- INFO PANEL -->
+            <div style="background:var(--dark); padding:40px 32px; display:flex; flex-direction:column; justify-content:center; gap:28px;">
+
+                <div>
+                    <div style="font-size:0.6rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--teal-light, #12a08f); margin-bottom:8px;">Our Location</div>
+                    <div style="font-family:var(--font-display); font-size:1.2rem; font-weight:700; color:white; line-height:1.4;">SmileCraft<br>Dental Studio</div>
+                </div>
+
+                <div style="display:flex; flex-direction:column; gap:18px;">
+
+                    <div style="display:flex; gap:14px; align-items:flex-start;">
+                        <div style="width:36px; height:36px; background:rgba(10,124,110,0.2); border:1px solid rgba(10,124,110,0.4); border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                            <i class="fas fa-map-marker-alt" style="color:var(--teal-light, #12a08f); font-size:0.85rem;"></i>
+                        </div>
+                        <div>
+                            <div style="font-size:0.7rem; color:rgba(255,255,255,0.4); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:3px;">Address</div>
+                            <div style="font-size:0.85rem; color:rgba(255,255,255,0.85); line-height:1.6;">42, Dental Plaza, MG Road<br>Bandra West, Mumbai 400050</div>
+                        </div>
+                    </div>
+
+                    <div style="display:flex; gap:14px; align-items:flex-start;">
+                        <div style="width:36px; height:36px; background:rgba(10,124,110,0.2); border:1px solid rgba(10,124,110,0.4); border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                            <i class="fas fa-clock" style="color:var(--teal-light, #12a08f); font-size:0.85rem;"></i>
+                        </div>
+                        <div>
+                            <div style="font-size:0.7rem; color:rgba(255,255,255,0.4); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:3px;">Hours</div>
+                            <div style="font-size:0.85rem; color:rgba(255,255,255,0.85); line-height:1.8;">
+                                Mon – Sat: 9:00 AM – 7:00 PM<br>
+                                Sunday: 10:00 AM – 2:00 PM
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display:flex; gap:14px; align-items:flex-start;">
+                        <div style="width:36px; height:36px; background:rgba(10,124,110,0.2); border:1px solid rgba(10,124,110,0.4); border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                            <i class="fas fa-phone-alt" style="color:var(--teal-light, #12a08f); font-size:0.85rem;"></i>
+                        </div>
+                        <div>
+                            <div style="font-size:0.7rem; color:rgba(255,255,255,0.4); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:3px;">Phone</div>
+                            <div style="font-size:0.85rem; color:rgba(255,255,255,0.85);">+91 98765 43210</div>
+                            <div style="font-size:0.75rem; color:rgba(255,255,255,0.4); margin-top:2px;">Emergency: +91 98765 00000</div>
+                        </div>
+                    </div>
+
+                    <div style="display:flex; gap:14px; align-items:flex-start;">
+                        <div style="width:36px; height:36px; background:rgba(10,124,110,0.2); border:1px solid rgba(10,124,110,0.4); border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                            <i class="fas fa-car" style="color:var(--teal-light, #12a08f); font-size:0.85rem;"></i>
+                        </div>
+                        <div>
+                            <div style="font-size:0.7rem; color:rgba(255,255,255,0.4); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:3px;">Parking & Transit</div>
+                            <div style="font-size:0.85rem; color:rgba(255,255,255,0.85); line-height:1.6;">Free parking available<br>2 min walk from Bandra Station</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Directions Button -->
+                <a href="https://www.google.com/maps/dir/?api=1&destination=Bandra+West+Mumbai"
+                    target="_blank"
+                    style="display:inline-flex; align-items:center; justify-content:center; gap:8px; background:var(--teal); color:white; padding:12px 24px; border-radius:30px; font-size:0.8rem; font-weight:600; text-decoration:none; transition:all 0.3s; letter-spacing:0.05em;"
+                    onmouseover="this.style.background='#12a08f'; this.style.transform='translateY(-2px)'"
+                    onmouseout="this.style.background='var(--teal)'; this.style.transform='translateY(0)'">
+                    <i class="fas fa-directions"></i> Get Directions
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+    <!-- ===================== FOOTER ===================== -->
+    <footer class="footer">
+        <div class="container-xl">
+            <div class="footer-grid">
+                <!-- Brand Column -->
+                <div>
+                    <div class="footer-brand">
+                        <i class="fas fa-tooth" style="color:var(--gold); margin-right:10px;"></i>SmileCraft
+                    </div>
+                    <p class="footer-desc">Mumbai's most trusted dental studio since 2003. We combine artistry,
+                        technology, and compassionate care to craft smiles that last a lifetime.</p>
+                    <div class="footer-social">
+                        <a href="#" class="footer-social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="footer-social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="footer-social-link"><i class="fab fa-youtube"></i></a>
+                        <a href="#" class="footer-social-link"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="footer-social-link"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <div class="footer-heading">Quick Links</div>
+                    <ul class="footer-links">
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#team">Our Team</a></li>
+                        <li><a href="#testimonials">Reviews</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                        <li><a href="#appointment">Book Appointment</a></li>
+                    </ul>
+                </div>
+
+                <!-- Services -->
+                <div>
+                    <div class="footer-heading">Our Services</div>
+                    <ul class="footer-links">
+                        <li><a href="#services">Teeth Whitening</a></li>
+                        <li><a href="#services">Porcelain Veneers</a></li>
+                        <li><a href="#services">Dental Implants</a></li>
+                        <li><a href="#services">Invisalign</a></li>
+                        <li><a href="#services">Root Canal</a></li>
+                        <li><a href="#services">Pediatric Dentistry</a></li>
+                        <li><a href="#services">Smile Makeover</a></li>
+                    </ul>
+                </div>
+
+                <!-- Newsletter -->
+                <div>
+                    <div class="footer-heading">Stay in the Loop</div>
+                    <p style="color:rgba(255,255,255,0.45); font-size:0.85rem; line-height:1.65; margin-bottom:16px;">
+                        Get dental tips, exclusive offers, and clinic news delivered to your inbox.</p>
+                    <div class="footer-newsletter-form">
+                        <input type="email" class="footer-input" placeholder="Your email address" id="newsletterEmail">
+                        <button class="footer-subscribe-btn" onclick="subscribeNewsletter()">Subscribe</button>
+                    </div>
+                    <div id="newsletterMsg"
+                        style="display:none; margin-top:10px; color:var(--gold-light); font-size:0.82rem;">
+                        <i class="fas fa-check-circle"></i> Thanks! You're subscribed.
+                    </div>
+                    <div style="margin-top:28px;">
+                        <div class="footer-heading">Working Hours</div>
+                        <div style="color:rgba(255,255,255,0.5); font-size:0.84rem; line-height:2;">
+                            Mon – Fri: 9AM – 8PM<br>
+                            Saturday: 9AM – 6PM<br>
+                            Sunday: 10AM – 4PM
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Bar -->
+            <div class="footer-bar">
+                <div class="footer-copy">© 2025 SmileCraft Dental Studio. All rights reserved.</div>
+                <div class="footer-bar-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Sitemap</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // ===================== CUSTOM CURSOR =====================
+        const cursor = document.getElementById('cursor');
+        const follower = document.getElementById('cursorFollower');
+        let mouseX = 0, mouseY = 0, followerX = 0, followerY = 0;
+
+        document.addEventListener('mousemove', e => {
+            mouseX = e.clientX; mouseY = e.clientY;
+            cursor.style.left = mouseX - 6 + 'px';
+            cursor.style.top = mouseY - 6 + 'px';
+        });
+
+        function animateFollower() {
+            followerX += (mouseX - followerX - 18) * 0.12;
+            followerY += (mouseY - followerY - 18) * 0.12;
+            follower.style.left = followerX + 'px';
+            follower.style.top = followerY + 'px';
+            requestAnimationFrame(animateFollower);
+        }
+        animateFollower();
+
+        document.querySelectorAll('a, button, .service-card, .team-card, .faq-question, .quiz-option').forEach(el => {
+            el.addEventListener('mouseenter', () => { cursor.classList.add('expand'); follower.classList.add('expand'); });
+            el.addEventListener('mouseleave', () => { cursor.classList.remove('expand'); follower.classList.remove('expand'); });
+        });
+
+        // ===================== NAVBAR =====================
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            navbar.classList.toggle('scrolled', window.scrollY > 60);
+            document.getElementById('backToTop').classList.toggle('visible', window.scrollY > 400);
+        });
+
+        // Mobile menu
+        const toggler = document.getElementById('mobileToggler');
+        const mobileMenu = document.getElementById('mobileMenu');
+        let menuOpen = false;
+        toggler.addEventListener('click', () => {
+            menuOpen = !menuOpen;
+            if (menuOpen) {
+                mobileMenu.style.display = 'block';
+                mobileMenu.style.maxHeight = '400px';
+            } else {
+                mobileMenu.style.maxHeight = '0';
+                setTimeout(() => mobileMenu.style.display = 'none', 400);
+            }
+        });
+        mobileMenu.querySelectorAll('a').forEach(a => {
+            a.addEventListener('click', () => {
+                menuOpen = false;
+                mobileMenu.style.maxHeight = '0';
+                setTimeout(() => mobileMenu.style.display = 'none', 400);
+            });
+        });
+
+        // ===================== HERO CAROUSEL =====================
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.dot');
+        let carouselTimer;
+
+        function goToSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            dots[currentSlide].classList.remove('active');
+            currentSlide = (n + slides.length) % slides.length;
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active');
+            resetCarouselTimer();
+        }
+
+        function nextSlide() { goToSlide(currentSlide + 1); }
+        function prevSlide() { goToSlide(currentSlide - 1); }
+
+        function resetCarouselTimer() {
+            clearInterval(carouselTimer);
+            carouselTimer = setInterval(nextSlide, 5500);
+        }
+        resetCarouselTimer();
+
+        // ===================== SCROLL REVEAL =====================
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    // Count-up
+                    entry.target.querySelectorAll('.count-up').forEach(el => startCount(el));
+                }
+            });
+        }, { threshold: 0.12 });
+
+        document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => observer.observe(el));
+
+        // ===================== COUNTER ANIMATION =====================
+        function startCount(el) {
+            if (el.dataset.done) return;
+            el.dataset.done = true;
+            const target = parseInt(el.dataset.target);
+            let current = 0;
+            const step = target / 60;
+            const interval = setInterval(() => {
+                current = Math.min(current + step, target);
+                el.textContent = Math.round(current).toLocaleString();
+                if (current >= target) clearInterval(interval);
+            }, 25);
+        }
+
+        // ===================== TESTIMONIALS SLIDER =====================
+        const track = document.getElementById('testimonialsTrack');
+        let testIndex = 0;
+        const cardWidth = 408; // card + gap
+
+        function updateTestimonials() {
+            const maxIndex = track.children.length - Math.floor(track.parentElement.offsetWidth / cardWidth);
+            testIndex = Math.max(0, Math.min(testIndex, maxIndex));
+            track.style.transform = `translateX(-${testIndex * cardWidth}px)`;
+        }
+
+        document.getElementById('testNext').addEventListener('click', () => { testIndex++; updateTestimonials(); });
+        document.getElementById('testPrev').addEventListener('click', () => { testIndex = Math.max(0, testIndex - 1); updateTestimonials(); });
+
+        // Auto scroll testimonials
+        setInterval(() => { testIndex++; updateTestimonials(); }, 4000);
+
+        // ===================== FAQ ACCORDION =====================
+        function toggleFaq(el) {
+            const item = el.closest('.faq-item');
+            const isOpen = item.classList.contains('open');
+            document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+            if (!isOpen) item.classList.add('open');
+        }
+
+        // ===================== SMILE QUIZ =====================
+        let quizScores = { q1: null, q2: null, q3: null, q4: null };
+        let currentQ = 1;
+
+        function selectOption(btn, qId, score) {
+            quizScores[qId] = score;
+            btn.closest('.quiz-question').querySelectorAll('.quiz-option').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+
+            setTimeout(() => {
+                btn.closest('.quiz-question').classList.remove('active');
+                if (currentQ < 4) {
+                    currentQ++;
+                    document.getElementById('q' + currentQ).classList.add('active');
+                    document.getElementById('quizProgress').style.width = (currentQ - 1) * 25 + '%';
+                } else {
+                    showQuizResult();
+                }
+            }, 500);
+        }
+
+        function showQuizResult() {
+            document.getElementById('quizProgress').style.width = '100%';
+            const total = Object.values(quizScores).reduce((a, b) => a + (b || 0), 0);
+            const pct = Math.round((total / 12) * 100);
+            const circle = document.getElementById('scoreCircle');
+            const deg = (pct / 100) * 360;
+            circle.style.background = `conic-gradient(var(--teal) ${deg}deg, var(--light-gray) ${deg}deg)`;
+            document.getElementById('scoreText').textContent = pct + '%';
+
+            let title, desc;
+            if (pct >= 80) {
+                title = '🌟 Excellent Smile Health!'; desc = 'Your oral health is in great shape! Keep up the routine and schedule a checkup to maintain that radiant smile.';
+            } else if (pct >= 55) {
+                title = '👍 Good — Room to Improve'; desc = 'Your smile health is decent but there\'s opportunity to improve. A professional cleaning and consultation can make a noticeable difference.';
+            } else {
+                title = '⚠️ Time for a Checkup!'; desc = 'Your smile needs some care. Don\'t worry — our team can help you get back on track quickly. Book a free consultation today.';
+            }
+            document.getElementById('scoreTitle').textContent = title;
+            document.getElementById('scoreDesc').textContent = desc;
+            document.getElementById('quizResult').classList.add('show');
+        }
+
+        // ===================== SERVICE PILL TOGGLE =====================
+        function togglePill(btn) {
+            document.querySelectorAll('.service-pill').forEach(p => p.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        // ===================== APPOINTMENT FORM =====================
+        // function submitForm() {
+        //     const fname = document.getElementById('fname').value;
+        //     if (!fname.trim()) {
+        //         document.getElementById('fname').focus();
+        //         document.getElementById('fname').style.borderColor = '#e74c3c';
+        //         return;
+        //     }
+        //     document.getElementById('appointmentForm').style.display = 'none';
+        //     const success = document.getElementById('formSuccess');
+        //     success.style.display = 'block';
+        //     success.querySelector('.success-icon').classList.add('success-animate');
+        // }
+
+        // function resetForm() {
+        //     document.getElementById('appointmentForm').style.display = 'block';
+        //     document.getElementById('formSuccess').style.display = 'none';
+        //     document.getElementById('fname').value = '';
+        //     document.getElementById('fname').style.borderColor = '';
+        // }
+
+        // ===================== NEWSLETTER =====================
+        async function subscribeNewsletter() {
+    const email = document.getElementById('newsletterEmail').value.trim();
+    const msgEl = document.getElementById('newsletterMsg');
+
+    if (!email || !email.includes('@')) {
+        document.getElementById('newsletterEmail').style.borderColor = '#e74c3c';
+        return;
+    }
+
+    const btn = document.querySelector('.footer-subscribe-btn');
+    btn.textContent = 'Subscribing...';
+    btn.disabled = true;
+
+    try {
+        const res = await fetch('http://localhost:5000/api/newsletter/subscribe', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email })
+        });
+        const data = await res.json();
+
+        document.getElementById('newsletterEmail').value = '';
+        document.getElementById('newsletterEmail').style.borderColor = '';
+        msgEl.style.display = 'block';
+
+        if (data.message === 'You are already subscribed!') {
+            msgEl.innerHTML = '<i class="fas fa-info-circle"></i> You are already subscribed!';
+            msgEl.style.color = 'var(--gold-light)';
+        } else {
+            msgEl.innerHTML = '<i class="fas fa-check-circle"></i> Thanks! You\'re subscribed.';
+            msgEl.style.color = 'var(--gold-light)';
+        }
+
+        setTimeout(() => msgEl.style.display = 'none', 5000);
+
+    } catch (err) {
+        msgEl.style.display = 'block';
+        msgEl.innerHTML = '<i class="fas fa-times-circle"></i> Failed. Please try again.';
+        msgEl.style.color = '#e74c3c';
+        setTimeout(() => msgEl.style.display = 'none', 4000);
+    } finally {
+        btn.textContent = 'Subscribe';
+        btn.disabled = false;
+    }
+}
+
+        // Smooth scroll for all anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', e => {
+                const target = document.querySelector(a.getAttribute('href'));
+                if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+            });
+        });
+
+        //changes starts hereeeeeeeeeeeeeeeeeeeeeeeeeeee
+
+        // Set min date to today
+document.getElementById('fdate').min = new Date().toISOString().split('T')[0];
+
+// Load available slots when date is picked
+document.getElementById('fdate').addEventListener('change', async function () {
+    const date = this.value;
+    const timeSelect = document.getElementById('ftime');
+    timeSelect.innerHTML = '<option value="">Loading slots...</option>';
+    try {
+        const res = await fetch(`http://localhost:5000/api/appointments/slots?date=${date}`);
+        const data = await res.json();
+        if (data.available.length === 0) {
+            timeSelect.innerHTML = '<option value="">No slots available for this date</option>';
+        } else {
+            timeSelect.innerHTML = '<option value="">Select a Time</option>';
+            data.available.forEach(slot => {
+                timeSelect.innerHTML += `<option value="${slot}">${slot}</option>`;
+            });
+        }
+    } catch (err) {
+        timeSelect.innerHTML = '<option value="">Could not load slots</option>';
+    }
+});
+
+// Get selected service pill
+function getSelectedService() {
+    const active = document.querySelector('.service-pill.active');
+    return active ? active.textContent.trim() : '';
+}
+
+// Submit form to backend
+async function submitForm() {
+    const name = document.getElementById('fname').value.trim() + ' ' + document.getElementById('lname').value.trim();
+    const email = document.getElementById('femail').value.trim();
+    const phone = document.getElementById('fphone').value.trim();
+    const service = getSelectedService();
+    const date = document.getElementById('fdate').value;
+    const time = document.getElementById('ftime').value;
+    const message = document.getElementById('fmessage').value.trim();
+
+    if (!name.trim() || !email || !phone || !service || !date || !time) {
+        alert('Please fill in all fields and select a time slot.');
+        return;
+    }
+
+    const btn = document.querySelector('.btn-submit');
+    btn.textContent = 'Booking...';
+    btn.disabled = true;
+
+    try {
+        const res = await fetch('http://localhost:5000/api/appointments/book', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, email, phone, service, date, time, message })
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+            document.getElementById('appointmentForm').style.display = 'none';
+            const success = document.getElementById('formSuccess');
+            success.style.display = 'block';
+            success.querySelector('.success-icon').classList.add('success-animate');
+        } else {
+            alert(data.error || 'Booking failed. Please try again.');
+            btn.textContent = 'Confirm Appointment';
+            btn.disabled = false;
+        }
+    } catch (err) {
+        alert('Could not connect to server. Please try again.');
+        btn.textContent = 'Confirm Appointment';
+        btn.disabled = false;
+    }
+}
+
+// Reset form
+function resetForm() {
+    document.getElementById('appointmentForm').style.display = 'block';
+    document.getElementById('formSuccess').style.display = 'none';
+    document.getElementById('fname').value = '';
+    document.getElementById('lname').value = '';
+    document.getElementById('femail').value = '';
+    document.getElementById('fphone').value = '';
+    document.getElementById('fdate').value = '';
+    document.getElementById('fmessage').value = '';
+    document.getElementById('ftime').innerHTML = '<option value="">Select Date First</option>';
+    document.querySelector('.btn-submit').textContent = 'Confirm Appointment';
+    document.querySelector('.btn-submit').disabled = false;
+}
+    </script>
+</body>
+
+</html>
