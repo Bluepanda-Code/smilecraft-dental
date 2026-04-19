@@ -3241,7 +3241,7 @@
     btn.disabled = true;
 
     try {
-        const res = await fetch('http://localhost:5000/api/newsletter/subscribe', {
+        const res = await fetch('https://smilecraft-api.onrender.com/api/newsletter/subscribe', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email })
@@ -3292,7 +3292,7 @@ document.getElementById('fdate').addEventListener('change', async function () {
     const timeSelect = document.getElementById('ftime');
     timeSelect.innerHTML = '<option value="">Loading slots...</option>';
     try {
-        const res = await fetch(`http://localhost:5000/api/appointments/slots?date=${date}`);
+        const res = await fetch(`https://smilecraft-api.onrender.com/api/appointments/slots?date=${date}`);
         const data = await res.json();
         if (data.available.length === 0) {
             timeSelect.innerHTML = '<option value="">No slots available for this date</option>';
@@ -3333,7 +3333,7 @@ async function submitForm() {
     btn.disabled = true;
 
     try {
-        const res = await fetch('http://localhost:5000/api/appointments/book', {
+        const res = await fetch('https://smilecraft-api.onrender.com/api/appointments/book', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name, email, phone, service, date, time, message })
