@@ -8,7 +8,12 @@ dotenv.config();
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: [
+        'https://smilecraft-dental.netlify.app',
+        'https://smilecraft-admin.netlify.app'
+    ]
+}));
 app.use(express.json());
 
 // Routes (we'll add these soon)
