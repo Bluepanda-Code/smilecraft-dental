@@ -1,21 +1,29 @@
 const express = require('express');
 const router = express.Router();
 const Appointment = require('../models/Appointment');
-const SibApiV3Sdk = require('@getbrevo/brevo');
 
-// Brevo API setup
-const defaultClient = SibApiV3Sdk.ApiClient.instance;
-const apiKey = defaultClient.authentications['api-key'];
-apiKey.apiKey = process.env.BREVO_API_KEY;
-const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
-
+// Send email via Brevo HTTP API (no SDK needed)
 async function sendEmail(to, subject, htmlContent) {
-    const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
-    sendSmtpEmail.subject = subject;
-    sendSmtpEmail.htmlContent = htmlContent;
-    sendSmtpEmail.sender = { name: 'SmileCraft Dental', email: process.env.EMAIL_USER };
-    sendSmtpEmail.to = [{ email: to }];
-    return apiInstance.sendTransacEmail(sendSmtpEmail);
+    const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+        method: 'POST',
+        headers: {
+            'accept': 'application/json',
+            'api-key': process.env.BREVO_API_KEY,
+            'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+            sender: { name: 'SmileCraft Dental', email: process.env.EMAIL_USER },
+            to: [{ email: to }],
+            subject: subject,
+            htmlContent: htmlContent
+        })
+    });
+
+    if (!response.ok) {
+        const err = await response.json();
+        throw new Error(JSON.stringify(err));
+    }
+    return response.json();
 }
 
 // GET available time slots for a date
